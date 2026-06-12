@@ -54,6 +54,12 @@ export default async function AdminDashboard() {
             >
               📊 Dashboard
             </Link>
+            <Link
+              href="/admin/clanky"
+              className="block border border-red-900 rounded-xl p-4 hover:border-red-500 hover:bg-red-950/20 transition"
+            >
+              📚 Správa článků
+            </Link>
 
             <Link
               href="/admin/novy-clanek"
