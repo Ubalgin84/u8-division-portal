@@ -4,7 +4,6 @@ import { supabase } from "../../lib/supabase";
 import LogoutButton from "./components/LogoutButton";
 
 export default async function AdminDashboard() {
-  console.log("ADMIN PAGE START");
 
   const { count } = await supabase
     .from("articles")
@@ -42,7 +41,7 @@ export default async function AdminDashboard() {
     results?.length
       ? results[results.length - 1]
       : null;
-console.log("ADMIN PAGE END");
+
   return (
     <main
       className="min-h-screen bg-cover bg-center bg-fixed"
