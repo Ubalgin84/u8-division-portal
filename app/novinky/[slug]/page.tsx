@@ -1,9 +1,62 @@
 export const dynamic = "force-dynamic";
+
+import { Metadata } from "next";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { supabase } from "../../../lib/supabase";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+
+  const { slug } = await params;
+
+  const { data: article } = await supabase
+    .from("articles")
+    .select("title, excerpt, image_url")
+    .eq("slug", slug)
+    .single();
+
+  if (!article) {
+    return {
+      title: "U8 Divisione",
+      description: "Motorsport reportáže U8 Divisione",
+    };
+  }
+
+  return {
+    title: `${article.title} | U8 Divisione`,
+    description: article.excerpt,
+
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      type: "article",
+      images: article.image_url
+        ? [
+          {
+            url: article.image_url,
+            width: 1200,
+            height: 630,
+            alt: article.title,
+          },
+        ]
+        : [],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
+      images: article.image_url
+        ? [article.image_url]
+        : [],
+    },
+  };
+}
 export default async function ArticlePage({
   params,
 }: {
@@ -13,7 +66,7 @@ export default async function ArticlePage({
   const { slug } = await params;
 
   const decodedSlug = decodeURIComponent(slug);
-  
+
   const { data: article, error } = await supabase
     .from("articles")
     .select("*")
@@ -59,75 +112,173 @@ export default async function ArticlePage({
             )}
 
           </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
-
-            <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
-              <p className="text-gray-500 uppercase text-sm">Start</p>
-              <p className="text-5xl font-black mt-2">
-                {article.start_pos}
-              </p>
-            </div>
-
-            <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
-              <p className="text-gray-500 uppercase text-sm">Cíl</p>
-              <p className="text-5xl font-black mt-2">
-                {article.finish_pos}
-              </p>
-            </div>
-
-            <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
-              <p className="text-gray-500 uppercase text-sm">Body</p>
-              <p className="text-5xl font-black mt-2">
-                {article.points}
-              </p>
-            </div>
-
-          </div>
-          <div className="grid md:grid-cols-6 gap-6 mb-16">
-            <div>
-              <p className="text-gray-500 uppercase text-sm">Datum</p>
-              <p className="text-xl font-bold">{article.race_date}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 uppercase text-sm">Trať</p>
-              <p className="text-xl font-bold">{article.track}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 uppercase text-sm">Vůz</p>
-              <p className="text-xl font-bold">{article.car}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 uppercase text-sm">Posádka</p>
-              <p className="text-xl font-bold">{article.crew}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 uppercase text-sm">Počasí</p>
-              <p className="text-xl font-bold">{article.weather}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 uppercase text-sm">Délka</p>
-              <p className="text-xl font-bold">{article.race_length}</p>
-            </div>
-
-          </div>
-
           <div className="bg-black/60 border border-red-900 rounded-2xl p-12 max-w-5xl mx-auto">
 
-            <div className="whitespace-pre-wrap text-xl leading-10 text-gray-200">
+            <div className="whitespace-pre-wrap text-xl leading-[2.2] text-gray-200">
               {article.content}
             </div>
-            {article.team_reaction && (
-              <div className="mt-12 border-t border-red-900 pt-8 max-w-5xl mx-auto">
+            <div className="mt-16 border-t border-red-900 pt-10">
 
-                <h2 className="text-3xl font-black mb-4">
+              <h2 className="text-3xl font-black mb-8">
+                Závodní data
+              </h2>
+
+              <div className="grid md:grid-cols-3 gap-6 mb-10">
+
+                <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
+                  <p className="text-gray-500 uppercase text-sm">
+                    Start
+                  </p>
+
+                  <p className="text-5xl font-black mt-2">
+                    P{article.start_pos}
+                  </p>
+                </div>
+
+                <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
+                  <p className="text-gray-500 uppercase text-sm">
+                    Cíl
+                  </p>
+
+                  <p className="text-5xl font-black mt-2 text-red-500">
+                    P{article.finish_pos}
+                  </p>
+                </div>
+
+                <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
+                  <p className="text-gray-500 uppercase text-sm">
+                    Body
+                  </p>
+
+                  <p className="text-5xl font-black mt-2">
+                    {article.points}
+                  </p>
+                </div>
+
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Datum
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.race_date}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Trať
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.track}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Vůz
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.car}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Posádka
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.crew}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Počasí
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.weather}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Délka
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.race_length}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Pit stopy
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.pit_stops || "Neuvedeno"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Nejlepší kolo
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.fastest_lap || "Neuvedeno"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Safety Car
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.safety_car || "Ne"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 uppercase text-sm">
+                    Změna počasí
+                  </p>
+
+                  <p className="text-xl font-bold">
+                    {article.weather_change || "Ne"}
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+            {article.team_reaction && (
+              <div className="mt-16 border-t border-red-900 pt-10">
+
+                <h2 className="text-3xl font-black mb-8">
                   Reakce týmu
                 </h2>
 
-                <p className="text-gray-300 text-lg leading-8">
-                  {article.team_reaction}
-                </p>
+                <div className="border-l-4 border-red-500 pl-6 py-2">
+
+                  <p className="text-2xl italic text-gray-200 leading-10">
+                    "{article.team_reaction}"
+                  </p>
+
+                  <p className="mt-4 text-red-500 uppercase tracking-widest text-sm">
+                    U8 Divisione
+                  </p>
+
+                </div>
 
               </div>
             )}

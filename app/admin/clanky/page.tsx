@@ -25,6 +25,37 @@ export default function ClankyPage() {
 
     setArticles(data || []);
   }
+  async function deleteArticle(id: number) {
+    const confirmed = confirm(
+      "Opravdu smazat článek?"
+    );
+
+    if (!confirmed) return;
+
+    const res = await fetch(
+      "/api/delete-article",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Mazání selhalo.");
+      return;
+    }
+
+    setArticles((prev) =>
+      prev.filter((article) => article.id !== id)
+    );
+
+    alert("Článek byl smazán.");
+  }
 
   const filteredArticles = articles.filter((article) => {
     const title = article.title?.toLowerCase() || "";
@@ -98,6 +129,12 @@ export default function ClankyPage() {
                 >
                   Upravit
                 </a>
+                <button
+                  onClick={() => deleteArticle(article.id)}
+                  className="border border-red-600 px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                >
+                  Smazat
+                </button>
 
               </div>
             </div>

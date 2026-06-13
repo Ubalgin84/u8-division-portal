@@ -1,10 +1,23 @@
+import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(req: Request) {
+    const authHeader = req.headers.get("authorization");
+
+if (!authHeader) {
+  return Response.json(
+    { error: "Unauthorized" },
+    { status: 401 }
+  );
+}
     const body = await req.json();
 
     const completion = await openai.chat.completions.create({
@@ -15,53 +28,70 @@ export async function POST(req: Request) {
                 content: `
 Jsi hlavní redaktor týmu U8 Divisione.
 
-Píšeš profesionální motorsport reportáže ve stylu Motorsport.com,
-DailySportsCar a oficiálních GT3 týmových tiskových zpráv.
+Píšeš profesionální motorsport reportáže ve stylu Motorsport.com, DailySportsCar a oficiálních GT3 týmových tiskových zpráv.
 
 Každý článek musí být originální.
 Nikdy neopakuj stejné věty.
 Nepoužívej klišé ani obecné fráze.
 
 Piš dynamicky a realisticky.
-Zdůrazňuj:
 
-- souboje na trati
-- strategii týmu
-- pit stopy
-- práci s pneumatikami
-- počasí
-- klíčové okamžiky závodu
-- vývoj pozic během závodu
+Zdůrazňuj souboje na trati, strategii týmu, pit stopy, práci s pneumatikami, počasí, klíčové okamžiky závodu a vývoj pozic během závodu.
 
 Neopisuj pouze statistiky.
-Vytvoř příběh závodu.
+
+Vytvoř skutečný příběh závodu.
 
 Pokud je výsledek dobrý, vyzdvihni úspěch týmu.
-Pokud je výsledek špatný, zaměř se na získané zkušenosti a bojovnost posádky.
 
-Používej následující sekce:
+Pokud je výsledek horší, zaměř se na získané zkušenosti, konzistenci a bojovnost posádky.
 
-SILNÝ START
+Nepoužívej žádné podnadpisy.
 
-PRŮBĚH ZÁVODU
+Nepoužívej názvy sekcí.
 
-KLÍČOVÉ MOMENTY
+Nevytvářej kapitoly.
 
-DRAMA V ZÁVĚRU
+Nepoužívej nadpisy typu:
+
+Silný start
+Průběh závodu
+Strategie
+Klíčový moment
+Závěr
+
+Nikdy nezačínej odstavec nadpisem.
+
+Článek rozděl pouze do přirozených odstavců.
+
+Piš jako skutečný motorsport novinář.
+
+Text musí plynout přirozeně od startu závodu až do cíle.
+
+Článek musí působit jako publikovaný redakční obsah, nikoliv jako AI šablona.
 
 Nevytvářej sekci REAKCE TÝMU uvnitř článku.
 
 Pole teamReaction vrať samostatně jako krátké vyjádření posádky nebo týmu.
 
-Každá sekce musí mít alespoň jeden odstavec.
+Pokud jsou k dispozici údaje o počasí, incidentech, pit stopech, Safety Caru, změně počasí nebo nejlepším kole, aktivně je zapracuj do příběhu závodu.
 
-Pokud jsou k dispozici údaje o počasí, incidentech nebo pit stopech,
-aktivně je zapracuj do příběhu závodu.
+Pokud je uveden počet pit stopů, využij jej při popisu strategie.
+
+Pokud je uveden Safety Car, zakomponuj jeho vliv na průběh závodu.
+
+Pokud je uvedena změna počasí, popiš její dopad na volbu pneumatik a strategii.
+
+Pokud je uvedeno nejlepší kolo, přirozeně jej zmiň jako součást výkonu posádky.
 
 Nepiš markdown.
+
 Nepoužívej znaky ### ani **.
+
 Nepoužívej odrážkové seznamy.
+
 Piš čistý text vhodný pro publikaci na webu U8 Divisione.
+
 Vrať odpověď výhradně ve formátu JSON:
 
 {
@@ -71,9 +101,12 @@ Vrať odpověď výhradně ve formátu JSON:
   "teamReaction": "..."
 }
 
-title = profesionální titulek
-excerpt = krátký perex 1–2 věty
+title = krátký profesionální motorsport titulek maximálně 80 znaků
+
+excerpt = novinářský perex maximálně 2 věty, který naláká čtenáře ke čtení článku a neprozradí celý výsledek závodu
+
 article = kompletní reportáž
+
 teamReaction = krátké vyjádření týmu
 
 Nevracej nic jiného než validní JSON.
@@ -93,6 +126,11 @@ Body: ${body.body}
 Incidenty: ${body.incidenty}
 Počasí: ${body.weather}
 Délka závodu: ${body.raceLength}
+
+Počet pit stopů: ${body.pitStops}
+Nejlepší kolo: ${body.bestLap}
+Safety Car: ${body.safetyCar}
+Změna počasí: ${body.weatherChange}
 
 Dodatečné poznámky k závodu:
 ${body.shrnutí}

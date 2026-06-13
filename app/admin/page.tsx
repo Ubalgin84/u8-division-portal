@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "../../lib/supabase";
-
-export const dynamic = "force-dynamic";
+import LogoutButton from "./components/LogoutButton";
 
 export default async function AdminDashboard() {
+  console.log("ADMIN PAGE START");
+
   const { count } = await supabase
     .from("articles")
     .select("*", { count: "exact", head: true });
@@ -15,8 +16,33 @@ export default async function AdminDashboard() {
     .order("id", { ascending: false })
     .limit(5);
 
-  const latestArticle = articles?.[0];
+  const { data: results } = await supabase
+    .from("results")
+    .select("*");
 
+  const latestArticle = articles?.[0];
+  const totalRaces = results?.length || 0;
+
+  const totalPoints =
+    results?.reduce(
+      (sum, race) => sum + (race.points || 0),
+      0
+    ) || 0;
+
+  const bestFinish =
+    results?.length
+      ? Math.min(
+        ...results.map(
+          (race) => race.finish_pos || 999
+        )
+      )
+      : "-";
+
+  const latestRace =
+    results?.length
+      ? results[results.length - 1]
+      : null;
+console.log("ADMIN PAGE END");
   return (
     <main
       className="min-h-screen bg-cover bg-center bg-fixed"
@@ -32,13 +58,7 @@ export default async function AdminDashboard() {
 
           <div className="p-8 border-b border-red-900">
 
-            <Image
-              src="/u8-logo.png"
-              alt="U8 Divisione"
-              width={220}
-              height={110}
-              priority
-            />
+          
 
             <p className="text-red-500 uppercase tracking-[0.4em] text-sm mt-6">
               Control Center
@@ -68,13 +88,25 @@ export default async function AdminDashboard() {
               📰 Nový článek
             </Link>
 
-            <div className="border border-red-900 rounded-xl p-4 text-gray-400">
+            <Link
+              href="/admin/media"
+              className="block border border-red-900 rounded-xl p-4 hover:border-red-500 hover:bg-red-950/20 transition"
+            >
               🖼 Média
-            </div>
+            </Link>
 
-            <div className="border border-red-900 rounded-xl p-4 text-gray-400">
+            <Link
+              href="/admin/ai-report"
+              className="block border border-red-900 rounded-xl p-4 hover:border-red-500 hover:bg-red-950/20 transition"
+            >
               🤖 AI Report
-            </div>
+            </Link>
+            <Link
+              href="/admin/vysledky"
+              className="block border border-red-900 rounded-xl p-4 hover:border-red-500 hover:bg-red-950/20 transition"
+            >
+              🏁 Výsledky
+            </Link>
 
           </nav>
 
@@ -97,30 +129,91 @@ export default async function AdminDashboard() {
               </h1>
 
             </div>
+            <div className="flex gap-3">
 
-            <a
-              href="/"
-              target="_blank"
-              className="border border-red-600 px-6 py-3 rounded-xl hover:bg-red-600 transition"
-            >
-              Otevřít web
-            </a>
+              <a
+                href="/"
+                target="_blank"
+                className="border border-red-600 px-6 py-3 rounded-xl hover:bg-red-600 transition"
+              >
+                Otevřít web
+              </a>
+
+              <LogoutButton />
+
+            </div>
+
 
           </div>
 
           <div className="p-10">
 
             {/* STATISTIKY */}
+            {latestRace && (
+              <div className="bg-black/70 border border-red-900 rounded-2xl p-8 mb-10">
+
+                <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
+                  Poslední závod
+                </p>
+
+                <h2 className="text-3xl font-black mb-2">
+                  {latestRace.race_name}
+                </h2>
+
+                <p className="text-gray-400">
+                  {latestRace.track}
+                </p>
+
+                <div className="mt-4 flex gap-8">
+
+                  <div>
+                    <p className="text-gray-500 text-sm">
+                      Start
+                    </p>
+
+                    <p className="text-xl font-bold">
+                      P{latestRace.start_pos}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-sm">
+                      Cíl
+                    </p>
+
+                    <p className="text-xl font-bold text-red-500">
+                      P{latestRace.finish_pos}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-sm">
+                      Body
+                    </p>
+
+                    <p className="text-xl font-bold">
+                      {latestRace.points}
+                    </p>
+                  </div>
+
+                </div>
+
+              </div>
+            )}
 
             <div className="grid md:grid-cols-4 gap-6 mb-10">
 
               <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
+                Reporty
+                {count ?? 0}
+              </div>
+              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
                 <p className="text-gray-400 uppercase text-sm">
-                  Reporty
+                  Počet závodů
                 </p>
 
                 <h2 className="text-7xl font-black text-red-500 mt-2">
-                  {count ?? 0}
+                  {totalRaces}
                 </h2>
               </div>
 
@@ -130,7 +223,7 @@ export default async function AdminDashboard() {
                 </p>
 
                 <h2 className="text-3xl font-black mt-2">
-                  {latestArticle?.track ?? "-"}
+                  {latestRace?.track ?? "-"}
                 </h2>
               </div>
 
@@ -140,17 +233,17 @@ export default async function AdminDashboard() {
                 </p>
 
                 <h2 className="text-5xl font-black text-red-500 mt-2">
-                  P2
+                  P{bestFinish}
                 </h2>
               </div>
 
               <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
                 <p className="text-gray-400 uppercase text-sm">
-                  Aktivní jezdci
+                  Celkové body
                 </p>
 
                 <h2 className="text-5xl font-black text-red-500 mt-2">
-                  3
+                  {totalPoints}
                 </h2>
               </div>
 
