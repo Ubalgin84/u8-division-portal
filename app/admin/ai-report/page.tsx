@@ -103,6 +103,12 @@ function AIReportContent() {
             data: { session },
         } = await supabase.auth.getSession();
 
+        if (!session) {
+            alert("Nejste přihlášen.");
+            setLoading(false);
+            return;
+        }
+
         const res = await fetch("/api/generate-report", {
             method: "POST",
             headers: {
@@ -113,6 +119,12 @@ function AIReportContent() {
         });
 
         const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || "Generování selhalo");
+            setLoading(false);
+            return;
+        }
+
 
         setResult(data);
         setLoading(false);
@@ -121,29 +133,36 @@ function AIReportContent() {
     async function publishArticle() {
         if (!result) return;
 
-        const res = await fetch(
-            "/api/save-ai-report",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    ...result,
-                    resultId,
-                    track: form.trat,
-                    car: form.vuz,
-                    start: form.start,
-                    finish: form.cil,
-                    points: form.body,
-                    incidents: form.incidenty,
-                    weather: form.weather,
-                    raceLength: form.raceLength,
-                    crew: form.crew,
-                    raceDate: form.raceDate,
-                }),
-            }
-        );
+        const {
+            data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+            alert("Nejste přihlášen.");
+            return;
+        }
+
+        const res = await fetch("/api/save-ai-report", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session?.access_token}`,
+            },
+            body: JSON.stringify({
+                ...result,
+                resultId,
+                track: form.trat,
+                car: form.vuz,
+                start: form.start,
+                finish: form.cil,
+                points: form.body,
+                incidents: form.incidenty,
+                weather: form.weather,
+                raceLength: form.raceLength,
+                crew: form.crew,
+                raceDate: form.raceDate,
+            }),
+        });
 
         const data = await res.json();
 

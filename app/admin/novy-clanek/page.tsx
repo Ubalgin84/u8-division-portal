@@ -137,12 +137,18 @@ U8 Divisione pokračuje v budování své pozice mezi předními týmy endurance
 `);
   };
   const generateAIArticle = async () => {
-    try {
-      const response = await fetch("/api/generate-report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  try {
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const response = await fetch("/api/generate-report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session?.access_token}`,
+      },
         body: JSON.stringify({
           nazev,
           trat,

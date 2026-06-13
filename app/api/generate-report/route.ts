@@ -4,28 +4,47 @@ import OpenAI from "openai";
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
+
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function POST(req: Request) {
-    const authHeader = req.headers.get("authorization");
+    try {
+        const authHeader = req.headers.get("authorization");
 
-if (!authHeader) {
-  return Response.json(
-    { error: "Unauthorized" },
-    { status: 401 }
-  );
-}
-    const body = await req.json();
+        if (
+            !authHeader ||
+            !authHeader.startsWith("Bearer ") ||
+            authHeader === "Bearer undefined"
+        ) {
+            return Response.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+        }
 
-    const completion = await openai.chat.completions.create({
-        model: "gpt-5-mini",
-        messages: [
-            {
-                role: "system",
-                content: `
+        const body = await req.json();
+
+        if (!body.nazev || !body.trat || !body.vuz) {
+            return Response.json(
+                {
+                    error: "Missing required fields",
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
+
+        const completion =
+            await openai.chat.completions.create({
+                model: "gpt-5-mini",
+                messages: [
+                    {
+                        role: "system",
+                        content: `
 Jsi hlavní redaktor týmu U8 Divisione.
 
 Píšeš profesionální motorsport reportáže ve stylu Motorsport.com, DailySportsCar a oficiálních GT3 týmových tiskových zpráv.
@@ -111,11 +130,11 @@ teamReaction = krátké vyjádření týmu
 
 Nevracej nic jiného než validní JSON.
 `,
-            },
+                    },
 
-            {
-                role: "user",
-                content: `
+                    {
+                        role: "user",
+                        content: `
 Název: ${body.nazev}
 Trať: ${body.trat}
 Vůz: ${body.vuz}
@@ -139,13 +158,39 @@ Na základě těchto údajů vytvoř kompletní reportáž.
 Neopakuj data pouze formou seznamu.
 Zakomponuj je přirozeně do příběhu závodu.
 `,
+                    },
+                ],
+            });
+
+        let result;
+
+        try {
+            result = JSON.parse(
+                completion.choices[0].message.content || "{}"
+            );
+        } catch {
+            return Response.json(
+                {
+                    error: "AI returned invalid JSON",
+                },
+                {
+                    status: 500,
+                }
+            );
+        }
+
+        return Response.json(result);
+
+    } catch (error) {
+        console.error("GENERATE REPORT ERROR:", error);
+
+        return Response.json(
+            {
+                error: "Internal server error",
             },
-        ],
-    });
-
-    const result = JSON.parse(
-        completion.choices[0].message.content || "{}"
-    );
-
-    return Response.json(result);
+            {
+                status: 500,
+            }
+        );
+    }
 }
