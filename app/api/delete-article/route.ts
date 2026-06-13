@@ -10,15 +10,28 @@ export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get("authorization");
 
-    if (!authHeader) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
-        {
-          status: 401,
-        }
+    if (
+      !authHeader ||
+      !authHeader.startsWith("Bearer ") ||
+      authHeader === "Bearer undefined"
+    ) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
       );
     }
 

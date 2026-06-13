@@ -24,13 +24,22 @@ export async function POST(req: Request) {
       authHeader === "Bearer undefined"
     ) {
       return Response.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
-        {
-          status: 401,
-        }
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
