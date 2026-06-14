@@ -8,12 +8,12 @@ export default async function Hero() {
     .select("*")
     .order("id", { ascending: false })
     .limit(1);
-    
+
   const featuredArticle = articles?.[0];
   return (
     <section
       id="domu"
-      className="relative h-screen flex items-center"
+      className="relative min-h-screen flex items-center"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
 
