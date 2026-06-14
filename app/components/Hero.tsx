@@ -17,23 +17,23 @@ export default async function Hero() {
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
 
-      <div className="relative z-10 max-w-3xl ml-32">
+      <div className="relative z-10 max-w-3xl mx-6 md:ml-32">
         <p className="text-red-500 font-bold tracking-widest mb-4">
           ENDURANCE. CHAOS. COMEBACK.
         </p>
 
-        <h1 className="text-8xl font-black text-white leading-none">
+        <h1 className="text-5xl md:text-8xl font-black text-white leading-none">
           U8 DIVISIONE
         </h1>
 
-        <h2 className="text-5xl font-black text-red-600 leading-none mt-2">
+        <h2 className="text-3xl md:text-5xl font-black text-red-600 leading-none mt-2">
           JEDEN TÝM. JEDEN CÍL.
         </h2>
-        <p className="text-red-400 uppercase tracking-[0.2em] mt-4">
+        <p className="text-red-400 uppercase tracking-[0.1em] md:tracking-[0.2em] mt-4 text-sm md:text-base">
           Sim Racing • Endurance • Streaming
         </p>
 
-        <p className="text-xl text-gray-300 mt-8 max-w-xl">
+        <p className="text-base md:text-xl text-gray-300 mt-6 md:mt-8 max-w-xl">
           Závodíme v endurance šampionátech na těch nejtěžších tratích.
           Strategie, týmová práce a vášeň nás ženou vpřed.
         </p>

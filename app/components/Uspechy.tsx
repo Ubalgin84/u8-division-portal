@@ -1,9 +1,9 @@
 export default function Uspechy() {
   return (
-    <section className="max-w-[1700px] mx-auto px-8 py-24">
+    <section className="max-w-[1700px] mx-auto px-4 md:px-8 py-16 md:py-24">
 
       <div className="text-center mb-16">
-        <h2 className="text-5xl font-black uppercase text-white">
+        <h2 className="text-4xl md:text-5xl font-black uppercase text-white">
           ÚSPĚCHY TÝMU
         </h2>
 
@@ -14,8 +14,8 @@ export default function Uspechy() {
 
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
 
-        <div className="border border-red-900 bg-black/70 rounded-xl p-10 text-center min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
-          <div className="text-8xl font-black text-red-500 mb-4">
+        <div className="border border-red-900 bg-black/70 rounded-xl p-6 md:p-10 text-center min-h-[220px] md:min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
+          <div className="text-5xl md:text-8xl font-black text-red-500 mb-4">
             26→2
           </div>
 
@@ -28,8 +28,8 @@ export default function Uspechy() {
           </p>
         </div>
 
-        <div className="border border-red-900 bg-black/70 rounded-xl p-10 text-center min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
-          <div className="text-8xl font-black text-red-500 mb-4">
+        <div className="border border-red-900 bg-black/70 rounded-xl p-6 md:p-10 text-center min-h-[220px] md:min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
+          <div className="text-5xl md:text-8xl font-black text-red-500 mb-4">
             18
           </div>
 
@@ -42,8 +42,8 @@ export default function Uspechy() {
           </p>
         </div>
 
-        <div className="border border-red-900 bg-black/70 rounded-xl p-10 text-center min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
-          <div className="text-8xl font-black text-red-500 mb-4">
+        <div className="border border-red-900 bg-black/70 rounded-xl p-6 md:p-10 text-center min-h-[220px] md:min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
+          <div className="text-5xl md:text-8xl font-black text-red-500 mb-4">
             25
           </div>
 
@@ -56,8 +56,8 @@ export default function Uspechy() {
           </p>
         </div>
 
-        <div className="border border-red-900 bg-black/70 rounded-xl p-10 text-center min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
-          <div className="text-8xl font-black text-red-500 mb-4">
+        <div className="border border-red-900 bg-black/70 rounded-xl p-6 md:p-10 text-center min-h-[220px] md:min-h-[260px] hover:border-red-500 hover:scale-105 transition duration-300">
+          <div className="text-5xl md:text-8xl font-black text-red-500 mb-4">
             3
           </div>
 

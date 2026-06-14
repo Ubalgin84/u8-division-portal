@@ -6,7 +6,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
 
           <div>
-            <h3 className="text-5xl font-black text-white">
+            <h3 className="text-4xl md:text-5xl font-black text-white">
               U8
             </h3>
 
@@ -24,7 +24,7 @@ export default function Footer() {
               Sleduj nás
             </h4>
 
-            <div className="flex justify-center gap-6">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
 
               <a
                 href="https://www.twitch.tv/ubalgin_8"
