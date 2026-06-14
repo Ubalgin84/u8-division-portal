@@ -104,11 +104,11 @@ export default function Header() {
           </a>
 
           <button
-  onClick={() => setMobileMenu(!mobileMenu)}
-  className="text-red-500 text-5xl border border-red-500 p-2"
->
-  TEST
-</button>
+            onClick={() => setMobileMenu(!mobileMenu)}
+            className="md:hidden text-white text-3xl"
+          >
+            {mobileMenu ? "✕" : "☰"}
+          </button>
 
         </div>
 
