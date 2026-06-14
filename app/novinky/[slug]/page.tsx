@@ -16,7 +16,7 @@ export async function generateMetadata({
 
   const { data: article } = await supabase
     .from("articles")
-    .select("title, excerpt, featured_image")
+    .select("title, excerpt, featured_image, image_url")
     .eq("slug", slug)
     .single();
 
@@ -35,10 +35,10 @@ export async function generateMetadata({
       title: article.title,
       description: article.excerpt,
       type: "article",
-      images: article.featured_image
+      images: (article.featured_image || article.image_url)
         ? [
           {
-            url: article.featured_image,
+            url: article.featured_image || article.image_url,
             width: 1200,
             height: 630,
             alt: article.title,
@@ -51,8 +51,8 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: article.title,
       description: article.excerpt,
-      images: article.featured_image
-        ? [article.featured_image]
+      images: (article.featured_image || article.image_url)
+        ? [article.featured_image || article.image_url]
         : [],
     },
   };

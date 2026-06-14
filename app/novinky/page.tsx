@@ -50,9 +50,13 @@ export default async function NovinkyPage() {
             >
               <article className="border border-red-900 bg-black/70 rounded-xl overflow-hidden hover:border-red-500 transition duration-300">
 
-                {featuredArticle.image_url && (
+                {(featuredArticle.featured_image || featuredArticle.image_url) && (
                   <img
-                    src={featuredArticle.image_url || "/hero-bg.png"}
+                    src={
+                      featuredArticle.featured_image ||
+                      featuredArticle.image_url ||
+                      "/hero-bg.png"
+                    }
                     alt={featuredArticle.title}
                     className="w-full h-[400px] object-cover"
                   />
@@ -94,7 +98,7 @@ export default async function NovinkyPage() {
                 className="block group"
               >
                 <article className="border border-red-900 bg-black/70 rounded-xl overflow-hidden hover:border-red-500 hover:scale-[1.02] transition duration-300">
-                  {article.image_url && (
+                  {(article.featured_image || article.image_url) && (
                     <img
                       src={article.image_url || "/hero-bg.png"}
                       alt={article.title}
