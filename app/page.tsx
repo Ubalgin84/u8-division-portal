@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
-import Uspechy from "./components/Uspechy";
 
 export default async function Home() {
   return (
@@ -18,7 +17,6 @@ export default async function Home() {
       <div className="bg-black/60 min-h-screen">
         <Header />
         <Hero />
-        <Uspechy />
         <Footer />
       </div>
     </main>
