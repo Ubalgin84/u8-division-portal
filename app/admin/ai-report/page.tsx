@@ -32,6 +32,7 @@ function AIReportContent() {
         weatherChange: "",
 
         shrnutí: "",
+        featuredImage: "",
     });
     useEffect(() => {
         if (resultId) {
@@ -72,6 +73,7 @@ function AIReportContent() {
             weatherChange: "",
 
             shrnutí: "",
+            featuredImage: "",
         });
     }
 
@@ -151,6 +153,7 @@ function AIReportContent() {
             body: JSON.stringify({
                 ...result,
                 resultId,
+                featuredImage: form.featuredImage,
                 track: form.trat,
                 car: form.vuz,
                 start: form.start,
@@ -348,6 +351,17 @@ function AIReportContent() {
                         className="p-4 h-40 bg-black border border-red-900 rounded-xl"
                         onChange={(e) =>
                             setForm({ ...form, shrnutí: e.target.value })
+                        }
+                    />
+                    <input
+                        placeholder="URL obrázku článku"
+                        value={form.featuredImage}
+                        className="p-4 bg-black border border-red-900 rounded-xl"
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                featuredImage: e.target.value,
+                            })
                         }
                     />
 

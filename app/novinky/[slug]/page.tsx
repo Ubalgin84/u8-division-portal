@@ -16,7 +16,7 @@ export async function generateMetadata({
 
   const { data: article } = await supabase
     .from("articles")
-    .select("title, excerpt, image_url")
+    .select("title, excerpt, featured_image")
     .eq("slug", slug)
     .single();
 
@@ -35,10 +35,10 @@ export async function generateMetadata({
       title: article.title,
       description: article.excerpt,
       type: "article",
-      images: article.image_url
+      images: article.featured_image
         ? [
           {
-            url: article.image_url,
+            url: article.featured_image,
             width: 1200,
             height: 630,
             alt: article.title,
@@ -51,8 +51,8 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: article.title,
       description: article.excerpt,
-      images: article.image_url
-        ? [article.image_url]
+      images: article.featured_image
+        ? [article.featured_image]
         : [],
     },
   };
@@ -103,9 +103,9 @@ export default async function ArticlePage({
             <p className="text-gray-400 text-xl max-w-3xl mx-auto">
               {article.excerpt}
             </p>
-            {article.image_url && (
+            {(article.featured_image || article.image_url) && (
               <img
-                src={article.image_url}
+                src={article.featured_image || article.image_url}
                 alt={article.title}
                 className="w-full max-w-5xl mx-auto rounded-2xl border border-red-900 mt-12 mb-12 object-cover"
               />

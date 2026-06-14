@@ -66,6 +66,8 @@ export async function POST(req: Request) {
         excerpt: body.excerpt,
         content: body.article,
 
+        featured_image: body.featuredImage,
+
         track: body.track,
         car: body.car,
 
