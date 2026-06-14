@@ -141,7 +141,7 @@ export default async function VysledkyPage() {
 
             <table className="w-full">
 
-              <thead className="bg-red-600">
+              <thead className="bg-gradient-to-r from-black to-red-950">
                 <tr>
                   <th className="text-left p-5">Datum</th>
                   <th className="text-left p-5">Závod</th>
