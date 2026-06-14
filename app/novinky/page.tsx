@@ -58,7 +58,7 @@ export default async function NovinkyPage() {
                       "/hero-bg.png"
                     }
                     alt={featuredArticle.title}
-                    className="w-full h-[400px] object-cover"
+                    className="w-full aspect-[16/9] object-cover object-center"
                   />
                 )}
 
@@ -100,9 +100,13 @@ export default async function NovinkyPage() {
                 <article className="border border-red-900 bg-black/70 rounded-xl overflow-hidden hover:border-red-500 hover:scale-[1.02] transition duration-300">
                   {(article.featured_image || article.image_url) && (
                     <img
-                      src={article.image_url || "/hero-bg.png"}
+                      src={
+                        article.featured_image ||
+                        article.image_url ||
+                        "/hero-bg.png"
+                      }
                       alt={article.title}
-                      className="w-full h-64 object-cover"
+                      className="w-full aspect-[16/9] object-cover object-center"
                     />
                   )}
 
