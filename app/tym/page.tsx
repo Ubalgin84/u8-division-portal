@@ -79,7 +79,7 @@ export default async function TymPage() {
         backgroundImage: "url('/hero-bg.png')",
       }}
     >
-      <div className="bg-black/40 min-h-screen">
+      <div className="bg-black/60 min-h-screen">
 
         <Header />
         <div className="h-40"></div>
@@ -246,7 +246,7 @@ export default async function TymPage() {
             </div>
 
             <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-2xl font-black text-red-500">
+              <p className="text-xl font-black text-red-500 break-words">
                 {mostUsedCar}
               </p>
 
@@ -256,7 +256,7 @@ export default async function TymPage() {
             </div>
 
             <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-2xl font-black text-red-500">
+              <p className="text-xl font-black text-red-500 break-words">
                 {mostUsedTrack}
               </p>
 

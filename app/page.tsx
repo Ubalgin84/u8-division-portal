@@ -15,7 +15,7 @@ export default async function Home() {
         backgroundPosition: "75% center",
       }}
     >
-      <div className="bg-black/40 min-h-screen">
+      <div className="bg-black/60 min-h-screen">
         <Header />
         <Hero />
         <Uspechy />

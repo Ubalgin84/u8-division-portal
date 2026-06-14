@@ -9,7 +9,7 @@ export default function HudbaPage() {
         backgroundImage: "url('/hero-bg.png')",
       }}
     >
-      <div className="bg-black/40 min-h-screen">
+      <div className="bg-black/60 min-h-screen">
         <Header />
 
         <section
