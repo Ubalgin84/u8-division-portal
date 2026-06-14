@@ -187,7 +187,7 @@ export default function ResultsPage() {
 
                                 </div>
 
-                                <div className="flex gap-4 items-center">
+                                <div className="flex gap-4 items-center flex-wrap">
 
                                     <span className="text-red-500 font-black">
                                         P{result.finish_pos}
@@ -196,6 +196,16 @@ export default function ResultsPage() {
                                     <span>
                                         {result.points} bodů
                                     </span>
+
+                                    {result.article_slug ? (
+                                        <span className="text-green-500 font-bold">
+                                            ✅ Report vytvořen
+                                        </span>
+                                    ) : (
+                                        <span className="text-yellow-500 font-bold">
+                                            ⚠ Bez reportu
+                                        </span>
+                                    )}
 
                                     <a
                                         href={`/admin/vysledky/edit/${result.id}`}
@@ -213,9 +223,14 @@ export default function ResultsPage() {
 
                                     <a
                                         href={`/admin/ai-report?id=${result.id}`}
-                                        className="border border-green-600 px-4 py-2 rounded-lg"
+                                        className={`px-4 py-2 rounded-lg border ${result.article_slug
+                                                ? "border-green-600 text-green-500"
+                                                : "border-yellow-600 text-yellow-500"
+                                            }`}
                                     >
-                                        🤖 Report
+                                        {result.article_slug
+                                            ? "✏️ Upravit report"
+                                            : "🤖 Vytvořit report"}
                                     </a>
 
                                 </div>
