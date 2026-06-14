@@ -149,7 +149,17 @@ export default function ResultsPage() {
                             setForm({ ...form, points: e.target.value })
                         }
                     />
-
+                    <input
+                        type="date"
+                        className="p-4 bg-black border border-red-900 rounded-xl"
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                race_date: e.target.value,
+                            })
+                        }
+                    />
+                    
                     <button
                         onClick={saveResult}
                         disabled={loading}
@@ -224,8 +234,8 @@ export default function ResultsPage() {
                                     <a
                                         href={`/admin/ai-report?id=${result.id}`}
                                         className={`px-4 py-2 rounded-lg border ${result.article_slug
-                                                ? "border-green-600 text-green-500"
-                                                : "border-yellow-600 text-yellow-500"
+                                            ? "border-green-600 text-green-500"
+                                            : "border-yellow-600 text-yellow-500"
                                             }`}
                                     >
                                         {result.article_slug

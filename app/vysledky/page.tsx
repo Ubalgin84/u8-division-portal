@@ -162,7 +162,13 @@ export default async function VysledkyPage() {
                     className="border-b border-red-900 hover:bg-red-950/30 transition"
                   >
                     <td className="p-5">
-                      {race.race_date || "-"}
+                      {race.race_date
+                        ? new Intl.DateTimeFormat("cs-CZ", {
+                          day: "numeric",
+                          month: "numeric",
+                          year: "numeric",
+                        }).format(new Date(race.race_date))
+                        : "-"}
                     </td>
 
                     <td className="p-5 font-bold">
@@ -179,12 +185,12 @@ export default async function VysledkyPage() {
 
                     <td
                       className={`text-center font-bold ${race.finish_pos === 1
-                          ? "text-yellow-400"
-                          : race.finish_pos === 2
-                            ? "text-gray-300"
-                            : race.finish_pos === 3
-                              ? "text-amber-600"
-                              : "text-red-500"
+                        ? "text-yellow-400"
+                        : race.finish_pos === 2
+                          ? "text-gray-300"
+                          : race.finish_pos === 3
+                            ? "text-amber-600"
+                            : "text-red-500"
                         }`}
                     >
                       P{race.finish_pos}
