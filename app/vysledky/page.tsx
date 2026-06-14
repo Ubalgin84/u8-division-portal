@@ -136,15 +136,16 @@ export default async function VysledkyPage() {
             </div>
 
           </div>
-          
+
           <div className="overflow-hidden rounded-xl border border-red-900 bg-black/70">
 
             <table className="w-full">
 
               <thead className="bg-red-600">
                 <tr>
+                  <th className="text-left p-5">Datum</th>
                   <th className="text-left p-5">Závod</th>
-                  <th className="text-left p-5">Trať</th>
+                  <th className="text-left p-5">Auto</th>
                   <th className="text-center p-5">Start</th>
                   <th className="text-center p-5">Cíl</th>
                   <th className="text-center p-5">Body</th>
@@ -158,27 +159,41 @@ export default async function VysledkyPage() {
 
                   <tr
                     key={race.id}
-                    className="border-b border-red-900"
+                    className="border-b border-red-900 hover:bg-red-950/30 transition"
                   >
+                    <td className="p-5">
+                      {race.race_date || "-"}
+                    </td>
+
                     <td className="p-5 font-bold">
                       {race.race_name}
                     </td>
 
                     <td className="p-5">
-                      {race.track}
+                      {race.car}
                     </td>
 
                     <td className="text-center">
                       P{race.start_pos}
                     </td>
 
-                    <td className="text-center text-red-500 font-bold">
+                    <td
+                      className={`text-center font-bold ${race.finish_pos === 1
+                          ? "text-yellow-400"
+                          : race.finish_pos === 2
+                            ? "text-gray-300"
+                            : race.finish_pos === 3
+                              ? "text-amber-600"
+                              : "text-red-500"
+                        }`}
+                    >
                       P{race.finish_pos}
                     </td>
 
                     <td className="text-center">
                       {race.points}
                     </td>
+
                     <td className="text-center">
 
                       {race.article_slug ? (
