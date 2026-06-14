@@ -27,15 +27,16 @@ export default async function Hero() {
         </h1>
 
         <h2 className="text-3xl md:text-5xl font-black text-red-600 leading-none mt-2">
-          JEDEN TÝM. JEDEN CÍL.
+          KAŽDÝ ZÁVOD ZANECHÁ STOPU.
         </h2>
+
         <p className="text-red-400 uppercase tracking-[0.1em] md:tracking-[0.2em] mt-4 text-sm md:text-base">
-          Sim Racing • Endurance • Streaming
+          Výsledky • Reportáže • Fotografie • Soundtracky
         </p>
 
         <p className="text-base md:text-xl text-gray-300 mt-6 md:mt-8 max-w-xl">
-          Závodíme v endurance šampionátech na těch nejtěžších tratích.
-          Strategie, týmová práce a vášeň nás ženou vpřed.
+          Vytváříme příběhy inspirované skutečnými závody U8 Divisione.
+          Každý závod se stává součástí historie — od výsledku přes report až po vlastní soundtrack.
         </p>
 
         <div className="mt-10 max-w-xl bg-black/70 backdrop-blur-sm border border-red-900 rounded-xl p-5">
