@@ -1,13 +1,14 @@
-import { supabase } from "../../lib/supabase";
+import { createClient } from "../../lib/supabase-server";
 
 export default async function Hero() {
+  const supabase = await createClient();
 
   const { data: articles } = await supabase
     .from("articles")
     .select("*")
     .order("id", { ascending: false })
     .limit(1);
-
+    
   const featuredArticle = articles?.[0];
   return (
     <section
