@@ -1,7 +1,77 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { supabase } from "../../lib/supabase";
 
-export default function TymPage() {
+
+export default async function TymPage() {
+
+  const { data: results } = await supabase
+    .from("results")
+    .select("*");
+
+  const totalRaces = results?.length || 0;
+
+  const podiums =
+    results?.filter(
+      (race: any) => race.finish_pos <= 3
+    ).length || 0;
+
+  const wins =
+    results?.filter(
+      (race: any) => race.finish_pos === 1
+    ).length || 0;
+
+  const totalPoints =
+    results?.reduce(
+      (sum: number, race: any) =>
+        sum + (race.points || 0),
+      0
+    ) || 0;
+
+  const bestFinish =
+    results?.length
+      ? Math.min(
+        ...results.map(
+          (race: any) =>
+            race.finish_pos || 999
+        )
+      )
+      : "-";
+
+  const mostUsedCar =
+    results?.length
+      ? Object.entries(
+        results.reduce(
+          (acc: any, race: any) => {
+            acc[race.car] =
+              (acc[race.car] || 0) + 1;
+            return acc;
+          },
+          {}
+        )
+      ).sort(
+        (a: any, b: any) =>
+          Number(b[1]) - Number(a[1])
+      )[0]?.[0] || "-"
+      : "-";
+
+  const mostUsedTrack =
+    results?.length
+      ? Object.entries(
+        results.reduce(
+          (acc: any, race: any) => {
+            acc[race.track] =
+              (acc[race.track] || 0) + 1;
+            return acc;
+          },
+          {}
+        )
+      ).sort(
+        (a: any, b: any) =>
+          Number(b[1]) - Number(a[1])
+      )[0]?.[0] || "-"
+      : "-";
+
   return (
     <main
       className="min-h-screen text-white bg-cover bg-center bg-fixed"
@@ -103,37 +173,100 @@ export default function TymPage() {
 
           {/* Statistiky */}
 
+          <div className="text-center mt-32 mb-12">
+
+            <p className="text-red-500 uppercase tracking-[0.3em] mb-4">
+              Hall of Fame
+            </p>
+
+            <h2 className="text-5xl font-black mb-4">
+              ÚSPĚCHY U8 DIVISIONE
+            </h2>
+
+            <p className="text-gray-400 text-lg">
+              Automaticky generováno z výsledků týmu.
+            </p>
+
+          </div>
+
           <div className="grid md:grid-cols-4 gap-6 mt-40">
 
             <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">3</p>
+              <p className="text-6xl font-black text-red-500">
+                {wins}
+              </p>
+
               <p className="text-gray-400 uppercase mt-3">
-                Aktivní jezdci
+                Vítězství
               </p>
             </div>
 
             <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">28+</p>
+              <p className="text-6xl font-black text-red-500">
+                {totalRaces}
+              </p>
+
               <p className="text-gray-400 uppercase mt-3">
-                Endurence Startů
+                Závodů
               </p>
             </div>
 
             <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">5+</p>
+              <p className="text-6xl font-black text-red-500">
+                {podiums}
+              </p>
+
               <p className="text-gray-400 uppercase mt-3">
                 Pódií
               </p>
             </div>
 
             <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">1800</p>
+              <p className="text-6xl font-black text-red-500">
+                {totalPoints}
+              </p>
+
               <p className="text-gray-400 uppercase mt-3">
-                Nejvyšší iRating
+                Celkem bodů
               </p>
             </div>
 
           </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mt-8">
+
+            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
+              <p className="text-6xl font-black text-red-500">
+                P{bestFinish}
+              </p>
+
+              <p className="text-gray-400 uppercase mt-3">
+                Nejlepší výsledek
+              </p>
+            </div>
+
+            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
+              <p className="text-2xl font-black text-red-500">
+                {mostUsedCar}
+              </p>
+
+              <p className="text-gray-400 uppercase mt-3">
+                Nejpoužívanější vůz
+              </p>
+            </div>
+
+            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
+              <p className="text-2xl font-black text-red-500">
+                {mostUsedTrack}
+              </p>
+
+              <p className="text-gray-400 uppercase mt-3">
+                Nejoblíbenější trať
+              </p>
+            </div>
+
+          </div>
+
           <div className="max-w-5xl mx-auto mt-32 bg-black/90 border border-red-900 rounded-xl p-12 text-center">
 
             <h2 className="text-5xl font-black mb-8 text-white">
