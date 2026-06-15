@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { supabase } from "../../lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 import LogoutButton from "./components/LogoutButton";
 
 export default async function AdminDashboard() {
-
+  const supabase = await createClient();
   const { count } = await supabase
     .from("articles")
     .select("*", { count: "exact", head: true });
@@ -57,7 +57,7 @@ export default async function AdminDashboard() {
 
           <div className="p-8 border-b border-red-900">
 
-          
+
 
             <p className="text-red-500 uppercase tracking-[0.4em] text-sm mt-6">
               Control Center
