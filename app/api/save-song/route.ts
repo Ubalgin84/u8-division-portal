@@ -48,22 +48,38 @@ export async function POST(req: Request) {
       );
     }
 
-    const { data, error } = await supabase
-      .from("songs")
-      .insert({
-        title: body.title,
-        cover_image: body.coverImage,
-        music_file: body.musicFile,
-        youtube_url: body.youtubeUrl,
-      })
-      .select()
-      .single();
+    let result;
 
-    if (error) {
+    if (body.id) {
+      result = await supabase
+        .from("songs")
+        .update({
+          title: body.title,
+          cover_image: body.coverImage,
+          music_file: body.musicFile,
+          youtube_url: body.youtubeUrl,
+        })
+        .eq("id", body.id)
+        .select()
+        .single();
+    } else {
+      result = await supabase
+        .from("songs")
+        .insert({
+          title: body.title,
+          cover_image: body.coverImage,
+          music_file: body.musicFile,
+          youtube_url: body.youtubeUrl,
+        })
+        .select()
+        .single();
+    }
+
+    if (result.error) {
       return Response.json(
         {
           success: false,
-          error: error.message,
+          error: result.error.message,
         },
         {
           status: 500,
@@ -73,7 +89,7 @@ export async function POST(req: Request) {
 
     return Response.json({
       success: true,
-      song: data,
+      song: result.data,
     });
 
   } catch (error) {

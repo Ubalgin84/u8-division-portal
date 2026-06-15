@@ -15,6 +15,7 @@ export default function AdminHudbaPage() {
     const [uploadingMusic, setUploadingMusic] = useState(false);
 
     const [songs, setSongs] = useState<any[]>([]);
+    const [editingSong, setEditingSong] = useState<any | null>(null);
 
     useEffect(() => {
         loadSongs();
@@ -125,6 +126,7 @@ export default function AdminHudbaPage() {
                         `Bearer ${session.access_token}`,
                 },
                 body: JSON.stringify({
+                    id: editingSong?.id,
                     title,
                     coverImage: coverUrl,
                     musicFile: musicUrl,
@@ -146,6 +148,7 @@ export default function AdminHudbaPage() {
         setYoutubeUrl("");
         setCoverUrl("");
         setMusicUrl("");
+        setEditingSong(null);
 
         loadSongs();
     }
@@ -215,7 +218,9 @@ export default function AdminHudbaPage() {
                 <div className="border border-red-900 rounded-2xl p-10 bg-black/70 mb-10">
 
                     <h2 className="text-3xl font-black mb-8">
-                        Přidat skladbu
+                        {editingSong
+                            ? "Úprava skladby"
+                            : "Přidat skladbu"}
                     </h2>
 
                     <input
@@ -276,7 +281,9 @@ export default function AdminHudbaPage() {
                         onClick={saveSong}
                         className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl font-bold"
                     >
-                        Uložit skladbu
+                        {editingSong
+                            ? "💾 Uložit změny"
+                            : "➕ Uložit skladbu"}
                     </button>
 
                 </div>
@@ -308,6 +315,24 @@ export default function AdminHudbaPage() {
                                     <h3 className="text-xl font-bold mb-4">
                                         {song.title}
                                     </h3>
+                                    <button
+                                        onClick={() => {
+                                            setEditingSong(song);
+
+                                            setTitle(song.title || "");
+                                            setYoutubeUrl(song.youtube_url || "");
+                                            setCoverUrl(song.cover_image || "");
+                                            setMusicUrl(song.music_file || "");
+
+                                            window.scrollTo({
+                                                top: 0,
+                                                behavior: "smooth",
+                                            });
+                                        }}
+                                        className="w-full mb-2 border border-blue-600 py-2 rounded-lg hover:bg-blue-600 transition"
+                                    >
+                                        ✏ Upravit
+                                    </button>
 
                                     <button
                                         onClick={() =>
