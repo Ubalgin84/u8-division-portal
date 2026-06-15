@@ -89,6 +89,10 @@ export async function POST(req: Request) {
         crew: body.crew,
         team_reaction: body.teamReaction,
 
+        music_title: body.musicTitle,
+        music_url: body.musicUrl,
+        music_file: body.musicFile,
+
         status: "published",
       })
       .select()
