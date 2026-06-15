@@ -33,9 +33,10 @@ export default function LoginPage() {
     return;
   }
 
-  console.log("LOGIN OK");
+ console.log("LOGIN OK");
 
-  window.location.href = "/admin";
+router.push("/admin");
+router.refresh();
 };
 
 return (
