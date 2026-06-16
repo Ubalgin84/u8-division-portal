@@ -17,7 +17,26 @@ export default function GlobalAudioPlayer() {
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
-    const [volume, setVolume] = useState(1);
+    const [volume, setVolume] = useState(0.5);
+    const [previousVolume, setPreviousVolume] =
+        useState(0.5);
+
+    useEffect(() => {
+        const savedVolume =
+            localStorage.getItem("u8-volume");
+
+        if (savedVolume) {
+            const volumeValue =
+                Number(savedVolume);
+
+            setVolume(volumeValue);
+
+            if (audioRef.current) {
+                audioRef.current.volume =
+                    volumeValue;
+            }
+        }
+    }, []);
 
     useEffect(() => {
         if (
@@ -28,6 +47,7 @@ export default function GlobalAudioPlayer() {
                 currentSong.music_file;
 
             audioRef.current.play();
+            audioRef.current.volume = volume;
 
             setPlaying(true);
         }
@@ -67,10 +87,27 @@ export default function GlobalAudioPlayer() {
     const changeVolume = (
         value: number
     ) => {
+        if (value > 0) {
+            setPreviousVolume(value);
+        }
+
         setVolume(value);
+
+        localStorage.setItem(
+            "u8-volume",
+            value.toString()
+        );
 
         if (audioRef.current) {
             audioRef.current.volume = value;
+        }
+    };
+    const toggleMute = () => {
+        if (volume === 0) {
+            changeVolume(previousVolume);
+        } else {
+            setPreviousVolume(volume);
+            changeVolume(0);
         }
     };
 
@@ -227,6 +264,12 @@ export default function GlobalAudioPlayer() {
                             className="border border-red-600 hover:bg-red-600 px-4 py-3 rounded-xl transition"
                         >
                             ⏭
+                        </button>
+                        <button
+                            onClick={toggleMute}
+                            className="border border-red-600 hover:bg-red-600 px-4 py-3 rounded-xl transition"
+                        >
+                            {volume === 0 ? "🔇" : "🔊"}
                         </button>
 
                         <input
