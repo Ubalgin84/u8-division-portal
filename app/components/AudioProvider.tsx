@@ -30,6 +30,9 @@ type AudioContextType = {
     shuffle: boolean;
     toggleShuffle: () => void;
 
+    repeatMode: "off" | "playlist" | "song";
+    toggleRepeat: () => void;
+
 };
 
 const AudioContext =
@@ -42,11 +45,29 @@ export function AudioProvider({
 }) {
     const [currentSong, setCurrentSong] =
         useState<SongType | null>(null);
+
     const [songs, setSongs] =
         useState<SongType[]>([]);
+
     const [shuffle, setShuffle] =
         useState(false);
 
+    const [repeatMode, setRepeatMode] =
+        useState<"off" | "playlist" | "song">(
+            "off"
+        );
+
+    const toggleRepeat = () => {
+        if (repeatMode === "off") {
+            setRepeatMode("playlist");
+        } else if (
+            repeatMode === "playlist"
+        ) {
+            setRepeatMode("song");
+        } else {
+            setRepeatMode("off");
+        }
+    };
     const toggleShuffle = () => {
         setShuffle(!shuffle);
     };
@@ -75,12 +96,23 @@ export function AudioProvider({
                     currentSong.music_file
             );
 
-        const nextIndex =
-            (currentIndex + 1) %
-            songs.length;
+        const isLastSong =
+            currentIndex ===
+            songs.length - 1;
+
+        if (isLastSong) {
+
+            if (repeatMode === "playlist") {
+                setCurrentSong(
+                    songs[0]
+                );
+            }
+
+            return;
+        }
 
         setCurrentSong(
-            songs[nextIndex]
+            songs[currentIndex + 1]
         );
     };
     const previousSong = () => {
@@ -103,16 +135,23 @@ export function AudioProvider({
             songs[previousIndex]
         );
     };
+    const currentIndex =
+        currentSong
+            ? songs.findIndex(
+                (song) =>
+                    song.music_file ===
+                    currentSong.music_file
+            )
+            : -1;
+
     const nextSongTitle =
-        currentSong && songs.length > 0
-            ? songs[
-                (songs.findIndex(
-                    (song) =>
-                        song.music_file ===
-                        currentSong.music_file
-                ) + 1) % songs.length
-            ]?.title || null
-            : null;
+        currentIndex >= 0 &&
+            currentIndex < songs.length - 1
+            ? songs[currentIndex + 1]
+                ?.title || null
+            : repeatMode === "playlist"
+                ? songs[0]?.title || null
+                : null;
 
     return (
         <AudioContext.Provider
@@ -130,6 +169,9 @@ export function AudioProvider({
 
                 shuffle,
                 toggleShuffle,
+
+                repeatMode,
+                toggleRepeat,
             }}
         >
             {children}

@@ -12,6 +12,8 @@ export default function GlobalAudioPlayer() {
         nextSongTitle,
         shuffle,
         toggleShuffle,
+        repeatMode,
+        toggleRepeat,
 
     } = useAudio();
 
@@ -180,7 +182,19 @@ export default function GlobalAudioPlayer() {
                     );
                 }}
                 onEnded={() => {
-                    setPlaying(false);
+                    if (!audioRef.current) return;
+
+                    if (repeatMode === "song") {
+                        audioRef.current.currentTime = 0;
+                        audioRef.current.play();
+                        return;
+                    }
+
+                    if (repeatMode === "playlist") {
+                        nextSong();
+                        return;
+                    }
+
                     nextSong();
                 }}
             />
@@ -275,11 +289,23 @@ export default function GlobalAudioPlayer() {
                         <button
                             onClick={toggleShuffle}
                             className={`px-4 py-3 rounded-xl transition border ${shuffle
-                                    ? "bg-red-600 border-red-600"
-                                    : "border-red-600 hover:bg-red-600"
+                                ? "bg-red-600 border-red-600"
+                                : "border-red-600 hover:bg-red-600"
                                 }`}
                         >
                             {shuffle ? "🔀" : "🔁"}
+                        </button>
+
+                        <button
+                            onClick={toggleRepeat}
+                            className={`px-4 py-3 rounded-xl transition border ${repeatMode !== "off"
+                                ? "bg-red-600 border-red-600"
+                                : "border-red-600 hover:bg-red-600"
+                                }`}
+                        >
+                            {repeatMode === "song"
+                                ? "🔂"
+                                : "🔁"}
                         </button>
 
                         <button
