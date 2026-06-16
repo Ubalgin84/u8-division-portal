@@ -25,6 +25,11 @@ type AudioContextType = {
     ) => void;
     nextSong: () => void;
     previousSong: () => void;
+
+    nextSongTitle: string | null;
+    shuffle: boolean;
+    toggleShuffle: () => void;
+
 };
 
 const AudioContext =
@@ -39,9 +44,29 @@ export function AudioProvider({
         useState<SongType | null>(null);
     const [songs, setSongs] =
         useState<SongType[]>([]);
+    const [shuffle, setShuffle] =
+        useState(false);
+
+    const toggleShuffle = () => {
+        setShuffle(!shuffle);
+    };
     const nextSong = () => {
         if (!currentSong || songs.length === 0)
             return;
+
+        if (shuffle) {
+            const randomIndex =
+                Math.floor(
+                    Math.random() *
+                    songs.length
+                );
+
+            setCurrentSong(
+                songs[randomIndex]
+            );
+
+            return;
+        }
 
         const currentIndex =
             songs.findIndex(
@@ -58,7 +83,6 @@ export function AudioProvider({
             songs[nextIndex]
         );
     };
-
     const previousSong = () => {
         if (!currentSong || songs.length === 0)
             return;
@@ -79,6 +103,16 @@ export function AudioProvider({
             songs[previousIndex]
         );
     };
+    const nextSongTitle =
+        currentSong && songs.length > 0
+            ? songs[
+                (songs.findIndex(
+                    (song) =>
+                        song.music_file ===
+                        currentSong.music_file
+                ) + 1) % songs.length
+            ]?.title || null
+            : null;
 
     return (
         <AudioContext.Provider
@@ -91,6 +125,11 @@ export function AudioProvider({
 
                 nextSong,
                 previousSong,
+
+                nextSongTitle,
+
+                shuffle,
+                toggleShuffle,
             }}
         >
             {children}

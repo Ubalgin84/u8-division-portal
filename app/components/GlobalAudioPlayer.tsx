@@ -9,7 +9,12 @@ export default function GlobalAudioPlayer() {
         setCurrentSong,
         nextSong,
         previousSong,
+        nextSongTitle,
+        shuffle,
+        toggleShuffle,
+
     } = useAudio();
+
 
     const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -201,6 +206,14 @@ export default function GlobalAudioPlayer() {
                         <h3 className="text-xl font-black">
                             {currentSong.title}
                         </h3>
+                        {nextSongTitle && (
+                            <p className="text-gray-400 text-sm mt-1">
+                                Up Next:{" "}
+                                <span className="text-red-500">
+                                    {nextSongTitle}
+                                </span>
+                            </p>
+                        )}
 
                         <div className="mt-3">
 
@@ -257,6 +270,16 @@ export default function GlobalAudioPlayer() {
                             className="border border-red-600 hover:bg-red-600 px-4 py-3 rounded-xl transition"
                         >
                             ⏹
+                        </button>
+
+                        <button
+                            onClick={toggleShuffle}
+                            className={`px-4 py-3 rounded-xl transition border ${shuffle
+                                    ? "bg-red-600 border-red-600"
+                                    : "border-red-600 hover:bg-red-600"
+                                }`}
+                        >
+                            {shuffle ? "🔀" : "🔁"}
                         </button>
 
                         <button
