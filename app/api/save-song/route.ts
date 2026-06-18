@@ -11,8 +11,7 @@ export async function POST(req: Request) {
 
     if (
       !authHeader ||
-      !authHeader.startsWith("Bearer ") ||
-      authHeader === "Bearer undefined"
+      !authHeader.startsWith("Bearer ")
     ) {
       return Response.json(
         { error: "Unauthorized" },
@@ -34,13 +33,44 @@ export async function POST(req: Request) {
       );
     }
 
+    // Pouze administrátor může spravovat hudbu
+    if (
+      process.env.ADMIN_EMAIL &&
+      user.email !== process.env.ADMIN_EMAIL
+    ) {
+      return Response.json(
+        { error: "Forbidden" },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
 
-    if (!body.title) {
+    if (
+      typeof body.title !== "string" ||
+      body.title.length < 1 ||
+      body.title.length > 200
+    ) {
       return Response.json(
         {
           success: false,
-          error: "Missing title",
+          error: "Invalid title",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (
+      body.youtubeUrl &&
+      typeof body.youtubeUrl === "string" &&
+      body.youtubeUrl.length > 500
+    ) {
+      return Response.json(
+        {
+          success: false,
+          error: "Invalid YouTube URL",
         },
         {
           status: 400,
@@ -76,10 +106,12 @@ export async function POST(req: Request) {
     }
 
     if (result.error) {
+      console.error("SAVE SONG ERROR:", result.error);
+
       return Response.json(
         {
           success: false,
-          error: result.error.message,
+          error: "Failed to save song",
         },
         {
           status: 500,
@@ -93,7 +125,7 @@ export async function POST(req: Request) {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("SAVE SONG ROUTE ERROR:", error);
 
     return Response.json(
       {
