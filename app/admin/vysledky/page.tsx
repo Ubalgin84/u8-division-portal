@@ -36,29 +36,48 @@ export default function ResultsPage() {
     async function saveResult() {
         setLoading(true);
 
-        const { error } = await supabase
-            .from("results")
-            .insert({
-                race_name: form.race_name,
-                track: form.track,
-                car: form.car,
-                crew: form.crew,
-                start_pos: Number(form.start_pos),
-                finish_pos: Number(form.finish_pos),
-                points: Number(form.points),
-                incidents: Number(form.incidents),
-                race_length: form.race_length,
-                weather: form.weather,
-                race_date: form.race_date,
-            });
+        const {
+            data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+            alert("Nejste přihlášen.");
+            setLoading(false);
+            return;
+        }
+
+        const response = await fetch(
+            "/api/save-result",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({
+                    race_name: form.race_name,
+                    track: form.track,
+                    car: form.car,
+                    crew: form.crew,
+                    start_pos: form.start_pos,
+                    finish_pos: form.finish_pos,
+                    points: form.points,
+                    incidents: form.incidents,
+                    race_length: form.race_length,
+                    weather: form.weather,
+                    race_date: form.race_date,
+                }),
+            }
+        );
 
         setLoading(false);
 
-        if (error) {
-            console.error(error);
+        if (!response.ok) {
             alert("Uložení selhalo.");
             return;
         }
+
         alert("Výsledek uložen.");
 
         loadResults();
@@ -70,13 +89,31 @@ export default function ResultsPage() {
 
         if (!confirmed) return;
 
-        const { error } = await supabase
-            .from("results")
-            .delete()
-            .eq("id", id);
+        const {
+            data: { session },
+        } = await supabase.auth.getSession();
 
-        if (error) {
-            console.error(error);
+        if (!session) {
+            alert("Nejste přihlášen.");
+            return;
+        }
+
+        const response = await fetch(
+            "/api/delete-result",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({
+                    id,
+                }),
+            }
+        );
+
+        if (!response.ok) {
             alert("Mazání selhalo.");
             return;
         }
@@ -159,7 +196,7 @@ export default function ResultsPage() {
                             })
                         }
                     />
-                    
+
                     <button
                         onClick={saveResult}
                         disabled={loading}
