@@ -1,22 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-
 export async function POST(req: Request) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-
   try {
     const authHeader = req.headers.get("authorization");
 
-    if (
-      !authHeader ||
-      !authHeader.startsWith("Bearer ") ||
-      authHeader === "Bearer undefined"
-    ) {
-      return Response.json(
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
@@ -24,15 +14,31 @@ export async function POST(req: Request) {
 
     const token = authHeader.replace("Bearer ", "");
 
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
-      return Response.json(
+      return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
+      );
+    }
+
+    // Pouze admin může mazat články
+    if (
+      process.env.ADMIN_EMAIL &&
+      user.email !== process.env.ADMIN_EMAIL
+    ) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
       );
     }
 
@@ -40,13 +46,8 @@ export async function POST(req: Request) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Missing article id",
-        },
-        {
-          status: 400,
-        }
+        { error: "Missing article id" },
+        { status: 400 }
       );
     }
 
@@ -56,32 +57,26 @@ export async function POST(req: Request) {
       .eq("id", id);
 
     if (error) {
+      console.error("Delete article error:", error);
+
       return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-        },
-        {
-          status: 500,
-        }
+        { error: "Failed to delete article" },
+        { status: 500 }
       );
     }
 
     return NextResponse.json({
       success: true,
     });
-
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Delete article route error:",
+      error
+    );
 
     return NextResponse.json(
-      {
-        success: false,
-        error: "Internal server error",
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
 }

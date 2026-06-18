@@ -14,13 +14,13 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+
   try {
     const authHeader = req.headers.get("authorization");
 
     if (
       !authHeader ||
-      !authHeader.startsWith("Bearer ") ||
-      authHeader === "Bearer undefined"
+      !authHeader.startsWith("Bearer ")
     ) {
       return Response.json(
         { error: "Unauthorized" },
@@ -42,6 +42,17 @@ export async function POST(req: Request) {
       );
     }
 
+    // Pouze administrátor může publikovat články
+    if (
+      process.env.ADMIN_EMAIL &&
+      user.email !== process.env.ADMIN_EMAIL
+    ) {
+      return Response.json(
+        { error: "Forbidden" },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
 
     if (!body.title) {
@@ -49,6 +60,38 @@ export async function POST(req: Request) {
         {
           success: false,
           error: "Missing title",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    // Ochrana proti nesmyslně dlouhým vstupům
+    if (
+      typeof body.title !== "string" ||
+      body.title.length > 200
+    ) {
+      return Response.json(
+        {
+          success: false,
+          error: "Invalid title",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (
+      body.article &&
+      typeof body.article === "string" &&
+      body.article.length > 50000
+    ) {
+      return Response.json(
+        {
+          success: false,
+          error: "Article too long",
         },
         {
           status: 400,
@@ -104,7 +147,7 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: false,
-          error: error.message,
+          error: "Failed to save article",
         },
         {
           status: 500,
