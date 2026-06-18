@@ -12,8 +12,7 @@ export async function POST(req: Request) {
 
     if (
       !authHeader ||
-      !authHeader.startsWith("Bearer ") ||
-      authHeader === "Bearer undefined"
+      !authHeader.startsWith("Bearer ")
     ) {
       return Response.json(
         { error: "Unauthorized" },
@@ -32,6 +31,17 @@ export async function POST(req: Request) {
       return Response.json(
         { error: "Unauthorized" },
         { status: 401 }
+      );
+    }
+
+    // Pouze administrátor může mazat skladby
+    if (
+      process.env.ADMIN_EMAIL &&
+      user.email !== process.env.ADMIN_EMAIL
+    ) {
+      return Response.json(
+        { error: "Forbidden" },
+        { status: 403 }
       );
     }
 
@@ -62,10 +72,15 @@ export async function POST(req: Request) {
       .eq("id", id);
 
     if (error) {
+      console.error(
+        "DELETE SONG ERROR:",
+        error
+      );
+
       return NextResponse.json(
         {
           success: false,
-          error: error.message,
+          error: "Failed to delete song",
         },
         {
           status: 500,
@@ -78,7 +93,10 @@ export async function POST(req: Request) {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error(
+      "DELETE SONG ROUTE ERROR:",
+      error
+    );
 
     return NextResponse.json(
       {
