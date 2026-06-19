@@ -10,7 +10,7 @@ export default function FeaturedReport({
   if (!article) return null;
 
   return (
-    <section className="bg-black/70 border border-red-900 rounded-2xl p-6 mb-10">
+    <section className="bg-black/70 border border-red-900 rounded-2xl p-6 h-full">
 
       <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
         Poslední report

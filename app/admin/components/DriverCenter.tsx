@@ -1,6 +1,6 @@
 export default function DriverCenter() {
     return (
-        <section className="bg-black/70 border border-red-900 rounded-2xl p-6 mb-10">
+        <section className="bg-black/70 border border-red-900 rounded-2xl p-6 h-full">
 
             <div className="flex items-center justify-between mb-6">
 

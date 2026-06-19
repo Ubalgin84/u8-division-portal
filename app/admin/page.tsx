@@ -189,10 +189,15 @@ export default async function AdminDashboard() {
               <UpcomingRaceCard />
 
             </div>
+            <div className="grid xl:grid-cols-2 gap-6 mb-10">
 
-            <FeaturedReport article={latestArticle} />
+              <FeaturedReport
+                article={latestArticle}
+              />
 
-            <QuickActions />
+              <QuickActions />
+
+            </div>
 
           </div>
 
