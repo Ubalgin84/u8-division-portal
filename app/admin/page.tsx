@@ -1,7 +1,14 @@
 import Link from "next/link";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase-server";
 import LogoutButton from "./components/LogoutButton";
+import HeroControlCenter from "./components/HeroControlCenter";
+import StatsGrid from "./components/StatsGrid";
+import DriverCenter from "./components/DriverCenter";
+import QuickActions from "./components/QuickActions";
+import MusicCenter from "./components/MusicCenter";
+import UpcomingRaceCard from "./components/UpcomingRaceCard";
+import FeaturedReport from "./components/FeaturedReport";
+
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
@@ -59,9 +66,17 @@ export default async function AdminDashboard() {
 
 
 
-            <p className="text-red-500 uppercase tracking-[0.4em] text-sm mt-6">
-              Control Center
-            </p>
+            <div className="text-center">
+              <h2 className="text-5xl font-black text-red-500">U8</h2>
+
+              <p className="text-gray-400 uppercase tracking-[0.3em] text-xs">
+                Divisione
+              </p>
+
+              <p className="text-red-500 uppercase tracking-[0.3em] text-xs mt-6">
+                Control Center
+              </p>
+            </div>
 
           </div>
 
@@ -106,6 +121,12 @@ export default async function AdminDashboard() {
             >
               🏁 Výsledky
             </Link>
+            <Link
+              href="/admin/kalendar"
+              className="block border border-blue-900 rounded-xl p-4 hover:border-blue-500 transition"
+            >
+              📅 Race Calendar
+            </Link>
 
           </nav>
 
@@ -147,218 +168,36 @@ export default async function AdminDashboard() {
 
           <div className="p-10">
 
-            {/* STATISTIKY */}
-            {latestRace && (
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8 mb-10">
+            <HeroControlCenter
+              latestRace={latestRace}
+              latestArticle={latestArticle}
+            />
 
-                <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
-                  Poslední závod
-                </p>
+            <StatsGrid
+              articleCount={count ?? 0}
+              totalRaces={totalRaces}
+              totalPoints={totalPoints}
+              bestFinish={bestFinish}
+            />
 
-                <h2 className="text-3xl font-black mb-2">
-                  {latestRace.race_name}
-                </h2>
+            <div className="grid xl:grid-cols-3 gap-6 mb-10">
 
-                <p className="text-gray-400">
-                  {latestRace.track}
-                </p>
+              <DriverCenter />
 
-                <div className="mt-4 flex gap-8">
+              <MusicCenter />
 
-                  <div>
-                    <p className="text-gray-500 text-sm">
-                      Start
-                    </p>
-
-                    <p className="text-xl font-bold">
-                      P{latestRace.start_pos}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-gray-500 text-sm">
-                      Cíl
-                    </p>
-
-                    <p className="text-xl font-bold text-red-500">
-                      P{latestRace.finish_pos}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-gray-500 text-sm">
-                      Body
-                    </p>
-
-                    <p className="text-xl font-bold">
-                      {latestRace.points}
-                    </p>
-                  </div>
-
-                </div>
-
-              </div>
-            )}
-
-            <div className="grid md:grid-cols-4 gap-6 mb-10">
-
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-                Reporty
-                {count ?? 0}
-              </div>
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-                <p className="text-gray-400 uppercase text-sm">
-                  Počet závodů
-                </p>
-
-                <h2 className="text-7xl font-black text-red-500 mt-2">
-                  {totalRaces}
-                </h2>
-              </div>
-
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-                <p className="text-gray-400 uppercase text-sm">
-                  Poslední závod
-                </p>
-
-                <h2 className="text-3xl font-black mt-2">
-                  {latestRace?.track ?? "-"}
-                </h2>
-              </div>
-
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-                <p className="text-gray-400 uppercase text-sm">
-                  Nejlepší výsledek
-                </p>
-
-                <h2 className="text-5xl font-black text-red-500 mt-2">
-                  P{bestFinish}
-                </h2>
-              </div>
-
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-                <p className="text-gray-400 uppercase text-sm">
-                  Celkové body
-                </p>
-
-                <h2 className="text-5xl font-black text-red-500 mt-2">
-                  {totalPoints}
-                </h2>
-              </div>
+              <UpcomingRaceCard />
 
             </div>
 
-            {/* POSLEDNÍ REPORT */}
+            <FeaturedReport article={latestArticle} />
 
-            {latestArticle && (
-
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-10 mb-10">
-
-                <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
-                  Poslední report
-                </p>
-
-                <h2 className="text-4xl font-black mb-4">
-                  {latestArticle.title}
-                </h2>
-
-                <p className="text-gray-300 text-lg">
-                  {latestArticle.excerpt}
-                </p>
-
-              </div>
-
-            )}
-
-            {/* POSLEDNÍ ČLÁNKY */}
-
-            <div className="bg-black/70 border border-red-900 rounded-2xl p-8 mb-10">
-
-              <h2 className="text-3xl font-black mb-8">
-                Poslední reporty
-              </h2>
-
-              <div className="space-y-4">
-
-                {articles?.map((article) => (
-
-                  <div
-                    key={article.id}
-                    className="border border-red-900 rounded-xl p-5 flex justify-between items-center"
-                  >
-                    <div>
-                      <h3 className="font-bold text-lg">
-                        {article.title}
-                      </h3>
-
-                      <p className="text-gray-500 text-sm">
-                        {article.track}
-                      </p>
-                    </div>
-
-                    <div className="flex gap-2">
-
-                      <a
-                        href={`/novinky/${article.slug}`}
-                        target="_blank"
-                        className="border border-green-600 px-4 py-2 rounded-lg hover:bg-green-600 transition"
-                      >
-                        Otevřít
-                      </a>
-
-                      <a
-                        href={`/admin/edit/${article.id}`}
-                        className="border border-yellow-600 px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
-                      >
-                        Upravit
-                      </a>
-
-                      <button
-                        className="border border-red-600 px-4 py-2 rounded-lg hover:bg-red-600 transition"
-                      >
-                        Smazat
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            </div>
-
-            {/* AKCE */}
-
-            <div className="grid md:grid-cols-3 gap-6">
-
-              <Link
-                href="/admin/novy-clanek"
-                className="bg-black/70 border border-red-900 rounded-2xl p-8 hover:border-red-500 transition"
-              >
-                📰 Nový článek
-              </Link>
-
-              <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-                🤖 AI Report
-              </div>
-
-              <a
-                href="/"
-                target="_blank"
-                className="bg-black/70 border border-red-900 rounded-2xl p-8"
-              >
-                🌐 Zobrazit web
-              </a>
-
-            </div>
+            <QuickActions />
 
           </div>
 
         </div>
-
       </div>
-    </main>
+    </main >
   );
 }

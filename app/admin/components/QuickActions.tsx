@@ -1,0 +1,83 @@
+import Link from "next/link";
+
+export default function QuickActions() {
+  return (
+    <section className="mb-10">
+
+      <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
+        Quick Actions
+      </p>
+
+      <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
+
+        <Link
+          href="/admin/novy-clanek"
+          className="bg-black/70 border border-red-900 rounded-2xl p-6 hover:border-red-500 hover:bg-red-950/20 transition"
+        >
+          <div className="text-3xl mb-3">📰</div>
+          <h3 className="font-bold text-lg">
+            Nový článek
+          </h3>
+        </Link>
+
+        <Link
+          href="/admin/ai-report"
+          className="bg-black/70 border border-red-900 rounded-2xl p-6 hover:border-red-500 hover:bg-red-950/20 transition"
+        >
+          <div className="text-3xl mb-3">🤖</div>
+          <h3 className="font-bold text-lg">
+            AI Report
+          </h3>
+        </Link>
+
+        <Link
+          href="/admin/media"
+          className="bg-black/70 border border-red-900 rounded-2xl p-6 hover:border-red-500 hover:bg-red-950/20 transition"
+        >
+          <div className="text-3xl mb-3">🎵</div>
+          <h3 className="font-bold text-lg">
+            Přidat skladbu
+          </h3>
+        </Link>
+
+        <Link
+          href="/admin/vysledky"
+          className="bg-black/70 border border-yellow-900 rounded-2xl p-6 hover:border-yellow-500 transition"
+        >
+          <div className="text-3xl mb-3">🏁</div>
+          <h3 className="font-bold text-lg">
+            Výsledky
+          </h3>
+        </Link>
+
+        <div
+          className="bg-black/70 border border-green-900 rounded-2xl p-6"
+        >
+          <div className="text-3xl mb-3">👤</div>
+          <h3 className="font-bold text-lg">
+            Driver Center
+          </h3>
+
+          <p className="text-gray-500 text-sm mt-2">
+            Coming Soon
+          </p>
+        </div>
+
+        <div
+          className="bg-black/70 border border-blue-900 rounded-2xl p-6"
+        >
+          <div className="text-3xl mb-3">📅</div>
+          <h3 className="font-bold text-lg">
+            Race Calendar
+          </h3>
+
+          <p className="text-gray-500 text-sm mt-2">
+            Coming Soon
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+  );
+}
