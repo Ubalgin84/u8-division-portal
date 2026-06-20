@@ -63,12 +63,12 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/media"
-            className={pathname === "/media"
+            href="/zavody"
+            className={pathname === "/zavody"
               ? "text-red-500 font-bold"
               : "text-white hover:text-red-500 transition"}
           >
-            Média
+            Závody
           </Link>
 
           <Link
@@ -133,8 +133,8 @@ export default function Header() {
               Tým
             </Link>
 
-            <Link href="/media" onClick={() => setMobileMenu(false)}>
-              Média
+            <Link href="/zavody" onClick={() => setMobileMenu(false)}>
+              Závody
             </Link>
 
             <Link href="/hudba" onClick={() => setMobileMenu(false)}>

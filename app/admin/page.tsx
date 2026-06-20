@@ -103,10 +103,10 @@ export default async function AdminDashboard() {
             </Link>
 
             <Link
-              href="/admin/media"
-              className="block border border-red-900 rounded-xl p-4 hover:border-red-500 hover:bg-red-950/20 transition"
+              href="/admin/kalendar"
+              className="block border border-blue-900 rounded-xl p-4 hover:border-blue-500 transition"
             >
-              🖼 Média
+              📅 Race Calendar
             </Link>
 
             <Link
@@ -121,13 +121,7 @@ export default async function AdminDashboard() {
             >
               🏁 Výsledky
             </Link>
-            <Link
-              href="/admin/kalendar"
-              className="block border border-blue-900 rounded-xl p-4 hover:border-blue-500 transition"
-            >
-              📅 Race Calendar
-            </Link>
-
+          
           </nav>
 
         </aside>
