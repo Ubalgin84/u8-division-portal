@@ -130,20 +130,8 @@ export default async function ZavodyPage() {
                                 Stav
                             </p>
 
-                            <p
-                                className={
-                                    dalsiZavod?.status === "upcoming"
-                                        ? "text-green-400 text-3xl font-black"
-                                        : dalsiZavod?.status === "planned"
-                                            ? "text-yellow-400 text-3xl font-black"
-                                            : "text-gray-400 text-3xl font-black"
-                                }
-                            >
-                                {dalsiZavod?.status === "upcoming"
-                                    ? "NADCHÁZEJÍCÍ"
-                                    : dalsiZavod?.status === "planned"
-                                        ? "PLÁNOVANÝ"
-                                        : "DOKONČENÝ"}
+                            <p className="text-green-400 text-3xl font-black">
+                                NADCHÁZEJÍCÍ
                             </p>
                         </div>
 
@@ -214,9 +202,11 @@ export default async function ZavodyPage() {
                             </p>
 
                             <p>
-                                Plánované: {
+                                Nadcházející: {
                                     zavody?.filter(
-                                        (zavod) => zavod.status === "planned"
+                                        (zavod) =>
+                                            zavod.race_datetime &&
+                                            new Date(zavod.race_datetime) > new Date()
                                     ).length ?? 0
                                 }
                             </p>
@@ -265,18 +255,18 @@ export default async function ZavodyPage() {
 
                                     <div
                                         className={
-                                            zavod.status === "upcoming"
+                                            zavod.race_datetime &&
+                                                new Date(zavod.race_datetime) > new Date()
                                                 ? "text-green-400 font-bold"
-                                                : zavod.status === "planned"
-                                                    ? "text-yellow-400 font-bold"
-                                                    : "text-gray-400 font-bold"
+                                                : "text-gray-400 font-bold"
                                         }
                                     >
-                                        {zavod.status === "upcoming"
-                                            ? "NADCHÁZEJÍCÍ"
-                                            : zavod.status === "planned"
-                                                ? "PLÁNOVANÝ"
-                                                : "DOKONČENÝ"}
+                                        {
+                                            zavod.race_datetime &&
+                                                new Date(zavod.race_datetime) > new Date()
+                                                ? "NADCHÁZEJÍCÍ"
+                                                : "DOKONČENÝ"
+                                        }
                                     </div>
 
                                 </div>

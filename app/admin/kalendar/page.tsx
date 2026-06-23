@@ -116,13 +116,7 @@ export default async function RaceCalendarPage() {
                 </p>
 
                 <p className="text-green-400 font-bold uppercase">
-                  {
-                    dalsiZavod.status === "upcoming"
-                      ? "NADCHÁZEJÍCÍ"
-                      : dalsiZavod.status === "planned"
-                        ? "PLÁNOVÁNO"
-                        : "DOKONČENO"
-                  }
+                  NADCHÁZEJÍCÍ
                 </p>
               </div>
 
@@ -273,19 +267,17 @@ export default async function RaceCalendarPage() {
 
                   <td
                     className={
-                      zavod.status === "upcoming"
+                      zavod.race_datetime &&
+                        new Date(zavod.race_datetime) > new Date()
                         ? "text-green-400 uppercase"
-                        : zavod.status === "planned"
-                          ? "text-yellow-400 uppercase"
-                          : "text-gray-400 uppercase"
+                        : "text-gray-400 uppercase"
                     }
                   >
                     {
-                      zavod.status === "upcoming"
+                      zavod.race_datetime &&
+                        new Date(zavod.race_datetime) > new Date()
                         ? "NADCHÁZEJÍCÍ"
-                        : zavod.status === "planned"
-                          ? "PLÁNOVÁNO"
-                          : "DOKONČENO"
+                        : "DOKONČENO"
                     }
                   </td>
 
