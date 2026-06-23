@@ -91,7 +91,7 @@ export default async function ZavodyPage() {
 
                     {/* DALŠÍ ZÁVOD */}
 
-                    <div className="bg-black/70 border border-red-900 rounded-2xl p-10 mb-10">
+                    <div className="bg-black/75 backdrop-blur-sm border border-red-900 rounded-2xl p-10">
 
                         <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
                             DALŠÍ ZÁVOD
@@ -159,7 +159,7 @@ export default async function ZavodyPage() {
 
                     <div className="grid lg:grid-cols-2 gap-6 mb-10">
 
-                        <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
+                        <div className="bg-black/75 backdrop-blur-sm border border-red-900 rounded-2xl p-8">
 
                             <h3 className="text-3xl font-black mb-6">
                                 PŘEHLED SEZÓNY
@@ -183,7 +183,7 @@ export default async function ZavodyPage() {
 
                         </div>
 
-                        <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
+                        <div className="bg-black/75 backdrop-blur-sm border border-red-900 rounded-2xl p-8">
 
                             <h3 className="text-3xl font-black mb-6">
                                 STATISTIKY SEZÓNY
@@ -225,8 +225,7 @@ export default async function ZavodyPage() {
                         </div>
 
                     </div>
-                    <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
-
+                    <div className="bg-black/75 backdrop-blur-sm border border-red-900 rounded-2xl p-10">
                         <h3 className="text-3xl font-black mb-8">
                             ROZPIS ZÁVODŮ
                         </h3>
