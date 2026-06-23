@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Countdown from "../components/Countdown";
 import { createClient } from "@/lib/supabase-server";
 
 export default async function ZavodyPage() {
@@ -8,10 +9,45 @@ export default async function ZavodyPage() {
     const { data: zavody } = await supabase
         .from("race_calendar")
         .select("*")
-        .order("week", { ascending: true });
+        .order("race_datetime", { ascending: true });
 
-    const dalsiZavod = zavody?.find(
-        (zavod) => zavod.status === "upcoming"
+    const ted = new Date();
+
+    const dalsiZavod = zavody
+        ?.filter(
+            (zavod) =>
+                zavod.race_datetime &&
+                new Date(zavod.race_datetime) > ted
+        )
+        .sort(
+            (a, b) =>
+                new Date(a.race_datetime).getTime() -
+                new Date(b.race_datetime).getTime()
+        )[0];
+
+    const rozdilMs = dalsiZavod?.race_datetime
+        ? new Date(dalsiZavod.race_datetime).getTime() - Date.now()
+        : 0;
+
+    const dny = Math.max(
+        0,
+        Math.floor(rozdilMs / (1000 * 60 * 60 * 24))
+    );
+
+    const hodiny = Math.max(
+        0,
+        Math.floor(
+            (rozdilMs % (1000 * 60 * 60 * 24)) /
+            (1000 * 60 * 60)
+        )
+    );
+
+    const minuty = Math.max(
+        0,
+        Math.floor(
+            (rozdilMs % (1000 * 60 * 60)) /
+            (1000 * 60)
+        )
     );
 
     return (
@@ -94,13 +130,35 @@ export default async function ZavodyPage() {
                                 Stav
                             </p>
 
-                            <p className="text-green-400 text-3xl font-black">
+                            <p
+                                className={
+                                    dalsiZavod?.status === "upcoming"
+                                        ? "text-green-400 text-3xl font-black"
+                                        : dalsiZavod?.status === "planned"
+                                            ? "text-yellow-400 text-3xl font-black"
+                                            : "text-gray-400 text-3xl font-black"
+                                }
+                            >
                                 {dalsiZavod?.status === "upcoming"
                                     ? "NADCHÁZEJÍCÍ"
                                     : dalsiZavod?.status === "planned"
                                         ? "PLÁNOVANÝ"
                                         : "DOKONČENÝ"}
                             </p>
+                        </div>
+
+                        <div className="mt-8 border-t border-red-900 pt-6">
+
+                            <p className="text-gray-500 text-sm uppercase tracking-[0.2em] mb-2">
+                                START ZA
+                            </p>
+
+                            {dalsiZavod?.race_datetime && (
+                                <Countdown
+                                    raceDatetime={dalsiZavod.race_datetime}
+                                />
+                            )}
+
                         </div>
 
                     </div>
@@ -162,15 +220,19 @@ export default async function ZavodyPage() {
                                     ).length ?? 0
                                 }
                             </p>
+                            <p>
+                                Dokončené: {
+                                    zavody?.filter(
+                                        (zavod) => zavod.status === "completed"
+                                    ).length ?? 0
+                                }
+                            </p>
 
                         </div>
 
                     </div>
 
                 </div>
-
-                {/* ROZPIS ZÁVODŮ */}
-
                 <div className="bg-black/70 border border-red-900 rounded-2xl p-8">
 
                     <h3 className="text-3xl font-black mb-8">
@@ -179,32 +241,70 @@ export default async function ZavodyPage() {
 
                     <div className="space-y-4">
 
+
                         {zavody?.map((zavod) => (
                             <div
                                 key={zavod.id}
-                                className="border border-red-900 rounded-xl p-5 flex justify-between items-center"
+                                className="border border-red-900 rounded-2xl p-6"
                             >
-                                <span>
-                                    Týden {zavod.week}
-                                </span>
+                                <div className="flex justify-between items-start">
 
-                                <span>
-                                    {zavod.track}
-                                </span>
+                                    <div>
+                                        <p className="text-red-500 text-sm uppercase tracking-[0.2em]">
+                                            Týden {zavod.week}
+                                        </p>
 
-                                <span
-                                    className={
-                                        zavod.status === "upcoming"
-                                            ? "text-green-400"
-                                            : "text-gray-400"
-                                    }
-                                >
-                                    {zavod.status === "upcoming"
-                                        ? "NADCHÁZEJÍCÍ"
-                                        : zavod.status === "planned"
-                                            ? "PLÁNOVANÝ"
-                                            : "DOKONČENÝ"}
-                                </span>
+                                        <h4 className="text-3xl font-black mt-2">
+                                            {zavod.track}
+                                        </h4>
+
+                                        <p className="text-gray-400 mt-2">
+                                            {zavod.series}
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        className={
+                                            zavod.status === "upcoming"
+                                                ? "text-green-400 font-bold"
+                                                : zavod.status === "planned"
+                                                    ? "text-yellow-400 font-bold"
+                                                    : "text-gray-400 font-bold"
+                                        }
+                                    >
+                                        {zavod.status === "upcoming"
+                                            ? "NADCHÁZEJÍCÍ"
+                                            : zavod.status === "planned"
+                                                ? "PLÁNOVANÝ"
+                                                : "DOKONČENÝ"}
+                                    </div>
+
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-4 mt-6">
+
+                                    <div>
+                                        <p className="text-gray-500 text-sm">
+                                            Datum
+                                        </p>
+
+                                        <p className="font-bold">
+                                            {zavod.race_date}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-500 text-sm">
+                                            Čas
+                                        </p>
+
+                                        <p className="font-bold">
+                                            {zavod.race_time}
+                                        </p>
+                                    </div>
+
+                                </div>
+
                             </div>
                         ))}
 
@@ -212,9 +312,9 @@ export default async function ZavodyPage() {
 
                 </div>
 
-            </section>
+            </section >
 
             <Footer />
-        </main>
+        </main >
     );
 }

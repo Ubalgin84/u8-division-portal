@@ -21,11 +21,19 @@ export default async function RaceCalendarPage() {
   const { data: zavody, error } = await supabase
     .from("race_calendar")
     .select("*")
-    .order("week", { ascending: true });
+    .order("race_datetime", { ascending: true });
 
   const dalsiZavod = zavody?.find(
-    (zavod) => zavod.status === "upcoming"
+    (zavod) =>
+      zavod.race_datetime &&
+      new Date(zavod.race_datetime) > new Date()
   );
+  const upcomingCount =
+    zavody?.filter(
+      (zavod) =>
+        zavod.race_datetime &&
+        new Date(zavod.race_datetime) > new Date()
+    ).length ?? 0;
 
   return (
     <main className="p-10 text-white">
@@ -108,7 +116,13 @@ export default async function RaceCalendarPage() {
                 </p>
 
                 <p className="text-green-400 font-bold uppercase">
-                  {dalsiZavod.status}
+                  {
+                    dalsiZavod.status === "upcoming"
+                      ? "NADCHÁZEJÍCÍ"
+                      : dalsiZavod.status === "planned"
+                        ? "PLÁNOVÁNO"
+                        : "DOKONČENO"
+                  }
                 </p>
               </div>
 
@@ -159,9 +173,7 @@ export default async function RaceCalendarPage() {
           <p>
             Nadcházející:
             {" "}
-            {zavody?.filter(
-              (zavod) => zavod.status === "upcoming"
-            ).length ?? 0}
+            {upcomingCount}
           </p>
 
           <p>
@@ -169,6 +181,14 @@ export default async function RaceCalendarPage() {
             {" "}
             {zavody?.filter(
               (zavod) => zavod.status === "planned"
+            ).length ?? 0}
+          </p>
+
+          <p>
+            Dokončené:
+            {" "}
+            {zavody?.filter(
+              (zavod) => zavod.status === "completed"
             ).length ?? 0}
           </p>
 
@@ -251,8 +271,22 @@ export default async function RaceCalendarPage() {
                     {zavod.race_time}
                   </td>
 
-                  <td className="text-green-400 uppercase">
-                    {zavod.status}
+                  <td
+                    className={
+                      zavod.status === "upcoming"
+                        ? "text-green-400 uppercase"
+                        : zavod.status === "planned"
+                          ? "text-yellow-400 uppercase"
+                          : "text-gray-400 uppercase"
+                    }
+                  >
+                    {
+                      zavod.status === "upcoming"
+                        ? "NADCHÁZEJÍCÍ"
+                        : zavod.status === "planned"
+                          ? "PLÁNOVÁNO"
+                          : "DOKONČENO"
+                    }
                   </td>
 
                   <td>

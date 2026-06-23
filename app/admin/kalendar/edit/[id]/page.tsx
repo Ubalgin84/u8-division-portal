@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase-server";
+import { error } from "console";
 import { redirect } from "next/navigation";
 
 async function upravitZavod(
@@ -8,6 +9,10 @@ async function upravitZavod(
     "use server";
 
     const supabase = await createClient();
+    const datum = formData.get("race_date");
+    const cas = formData.get("race_time");
+
+    const raceDatetime = `${datum}T${cas}:00`;
 
     const data = {
         season: formData.get("season"),
@@ -17,6 +22,7 @@ async function upravitZavod(
         race_date: formData.get("race_date"),
         race_time: formData.get("race_time"),
         status: formData.get("status"),
+        race_datetime: raceDatetime,
     };
 
     console.log("ID:", id);
@@ -25,9 +31,12 @@ async function upravitZavod(
     const { error } = await supabase
         .from("race_calendar")
         .update(data)
-        .eq("id", id);
+        .eq("id", Number(id));
 
-    console.log("ERROR:", error);
+    if (error) {
+        console.error(error);
+        throw new Error("Nepodařilo se uložit změny.");
+    }
 
     redirect("/admin/kalendar");
 }
@@ -44,7 +53,7 @@ export default async function EditaceZavoduPage({
     const { data: zavod } = await supabase
         .from("race_calendar")
         .select("*")
-        .eq("id", id)
+        .eq("id", Number(id))
         .single();
 
     if (!zavod) {
@@ -140,6 +149,7 @@ export default async function EditaceZavoduPage({
 
                     <input
                         name="race_time"
+                        type="time"
                         defaultValue={zavod.race_time}
                         className="w-full bg-black border border-red-900 rounded-xl p-3"
                     />
@@ -169,12 +179,21 @@ export default async function EditaceZavoduPage({
                     </select>
                 </div>
 
-                <button
-                    type="submit"
-                    className="border border-yellow-600 px-6 py-3 rounded-xl hover:bg-yellow-600 transition"
-                >
-                    Uložit změny
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        type="submit"
+                        className="border border-yellow-600 px-6 py-3 rounded-xl hover:bg-yellow-600 transition"
+                    >
+                        Uložit změny
+                    </button>
+
+                    <a
+                        href="/admin/kalendar"
+                        className="border border-gray-700 px-6 py-3 rounded-xl hover:bg-gray-800 transition"
+                    >
+                        Zrušit
+                    </a>
+                </div>
 
             </form>
 

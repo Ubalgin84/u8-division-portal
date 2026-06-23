@@ -5,6 +5,10 @@ async function ulozitZavod(formData: FormData) {
     "use server";
 
     const supabase = await createClient();
+    const datum = formData.get("race_date");
+    const cas = formData.get("race_time");
+
+    const raceDatetime = `${datum}T${cas}:00`;
 
     await supabase
         .from("race_calendar")
@@ -16,6 +20,7 @@ async function ulozitZavod(formData: FormData) {
             race_date: formData.get("race_date"),
             race_time: formData.get("race_time"),
             status: formData.get("status"),
+            race_datetime: raceDatetime,
         });
 
     redirect("/admin/kalendar");

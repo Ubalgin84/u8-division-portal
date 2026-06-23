@@ -4,14 +4,13 @@ import { createClient } from "@/lib/supabase-server";
 export default async function UpcomingRaceCard() {
   const supabase = await createClient();
 
-  const { data: zavody } = await supabase
+  const { data: dalsiZavod } = await supabase
     .from("race_calendar")
     .select("*")
-    .eq("status", "upcoming")
-    .order("week", { ascending: true })
-    .limit(1);
-
-  const dalsiZavod = zavody?.[0];
+    .gt("race_datetime", new Date().toISOString())
+    .order("race_datetime", { ascending: true })
+    .limit(1)
+    .single();
 
   return (
     <section className="bg-black/70 border border-red-900 rounded-2xl p-6 h-full">
