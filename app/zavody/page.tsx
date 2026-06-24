@@ -38,6 +38,21 @@ export default async function ZavodyPage() {
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("cs-CZ");
     };
+
+    const upcomingRaces =
+        zavody?.filter(
+            (zavod) =>
+                zavod.race_datetime &&
+                new Date(zavod.race_datetime) > new Date()
+        ) ?? [];
+
+    const completedRaces =
+        zavody?.filter(
+            (zavod) =>
+                zavod.race_datetime &&
+                new Date(zavod.race_datetime) <= new Date()
+        ) ?? [];
+
     return (
         <main
             className="min-h-screen text-white bg-cover bg-center bg-fixed"
@@ -171,14 +186,17 @@ export default async function ZavodyPage() {
                             ROZPIS ZÁVODŮ
                         </h3>
 
+                        <h4 className="text-xl font-bold text-green-400 mb-6">
+                            NADCHÁZEJÍCÍ ZÁVODY
+                        </h4>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
 
-                            {zavody?.map((zavod) => (
+                            {upcomingRaces.map((zavod) => (
                                 <div
                                     key={zavod.id}
-                                    className="overflow-hidden bg-black/80 border border-red-900 rounded-2xl hover:border-red-600 transition-all duration-300 hover:scale-[1.02]"
-                                >
+                                    className="overflow-hidden bg-black/80 border border-red-900 rounded-2xl hover:border-red-600 transition-all duration-300 hover:scale-[1.02]">
                                     <div className="relative h-64 w-full">
                                         <Image
                                             src={trackImages[zavod.track] || "/hero-bg.png"}
@@ -247,16 +265,94 @@ export default async function ZavodyPage() {
                                         </div>
                                     </div>
                                 </div>
+
                             ))}
 
                         </div>
 
-                    </div>
+                        <h4 className="text-xl font-bold text-gray-400 mt-12 mb-6">
+                            DOKONČENÉ ZÁVODY
+                        </h4>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                            {completedRaces.map((zavod) => (
+                                <div
+                                    key={zavod.id}
+                                    className="overflow-hidden bg-black/60 border border-gray-800 rounded-2xl opacity-80"
+                                >
+                                    <div className="relative h-64 w-full">
+                                        <Image
+                                            src={trackImages[zavod.track] || "/hero-bg.png"}
+                                            alt={zavod.track}
+                                            fill
+                                            className="object-cover grayscale"
+                                        />
+
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+
+                                        <div className="absolute top-4 right-4">
+                                            <span className="bg-gray-700/90 text-white px-4 py-1 rounded-full text-xs font-bold">
+                                                DOKONČENÝ
+                                            </span>
+                                        </div>
+
+                                        <div className="absolute bottom-0 left-0 p-6 pb-0 translate-y-10">
+                                            <p className="text-red-500 text-xs uppercase tracking-[0.3em] mb-2">
+                                                Týden {zavod.week}
+                                            </p>
+
+                                            <h4 className="text-2xl font-black leading-tight">
+                                                {zavod.track}
+                                            </h4>
+
+                                            <p className="text-gray-300 text-sm mt-2">
+                                                {zavod.series}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-6">
+
+                                        <div className="grid md:grid-cols-2 gap-4 mt-6">
+
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Datum
+                                                </p>
+
+                                                <p className="font-bold text-lg">
+                                                    {formatDate(zavod.race_date)}
+                                                </p>
+                                            </div>
+
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Čas
+                                                </p>
+
+                                                <p className="font-bold text-lg">
+                                                    {zavod.race_time}
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            ))}
+
+                        </div>
+
+
+                    </div >
 
                 </section >
 
                 <Footer />
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }
