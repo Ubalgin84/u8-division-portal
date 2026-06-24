@@ -16,13 +16,13 @@ export default async function NextRaceCard() {
   if (!dalsiZavod) return null;
 
   return (
-    <section className="bg-black/90 backdrop-blur-sm border border-red-900 rounded-2xl p-3">
+    <section className="bg-black/90 backdrop-blur-sm border border-red-900 rounded-2xl p-4">
 
       <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
         Další závod
       </p>
 
-      <h2 className="text-4xl font-black">
+      <h2 className="text-3xl font-black leading-tight">
         {dalsiZavod.track}
       </h2>
 
@@ -30,7 +30,7 @@ export default async function NextRaceCard() {
         {dalsiZavod.series}
       </p>
 
-      <div className="grid md:grid-cols-2 gap-6 mt-6">
+      <div className="grid grid-cols-2 gap-4 mt-5">
 
         <div>
           <p className="text-gray-500 text-sm">
@@ -54,7 +54,7 @@ export default async function NextRaceCard() {
 
       </div>
 
-      <div className="mt-8 border-t border-red-900 pt-6">
+      <div className="mt-6 border-t border-red-900 pt-4">
 
         <p className="text-gray-500 text-sm uppercase tracking-[0.2em] mb-2">
           Start za
@@ -68,7 +68,7 @@ export default async function NextRaceCard() {
 
       <Link
         href="/zavody"
-        className="inline-flex mt-8 border border-red-600 px-5 py-3 rounded-xl hover:bg-red-600 transition"
+        className="inline-flex mt-6 border border-red-600 px-4 py-2 text-sm rounded-xl hover:bg-red-600 transition"
       >
         Zobrazit kalendář
       </Link>

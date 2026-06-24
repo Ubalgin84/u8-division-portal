@@ -1,12 +1,14 @@
+import Container from "./Container";
+
 export default function Footer() {
   return (
     <footer className="border-t border-red-900 mt-32">
-      <div className="max-w-[1700px] mx-auto px-8 py-12">
+      <Container className="py-12">
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
 
           <div>
-            <h3 className="text-4xl md:text-5xl font-black text-white">
+            <h3 className="text-3xl md:text-4xl font-black text-white">
               U8
             </h3>
 
@@ -14,17 +16,17 @@ export default function Footer() {
               Divisione
             </p>
 
-            <p className="text-gray-300 mt-4 text-lg">
+            <p className="text-gray-300 mt-3 text-base">
               Jeden tým. Jeden cíl.
             </p>
           </div>
 
           <div className="text-center">
-            <h4 className="text-white font-bold uppercase mb-4">
+            <h4 className="text-white text-sm font-bold uppercase mb-3 tracking-wider">
               Sleduj nás
             </h4>
 
-            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            <div className="flex flex-wrap justify-center gap-4">
 
               <a
                 href="https://www.twitch.tv/ubalgin_8"
@@ -57,18 +59,18 @@ export default function Footer() {
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-sm">
               © 2026 U8 Divisione
             </p>
 
-            <p className="text-gray-600 text-sm mt-2">
+            <p className="text-gray-600 text-xs mt-1">
               Všechna práva vyhrazena.
             </p>
           </div>
 
         </div>
 
-      </div>
+      </Container>
     </footer>
   );
 }
