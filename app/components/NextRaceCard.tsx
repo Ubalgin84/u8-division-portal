@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase-server";
 import Countdown from "./Countdown";
+import Card from "./ui/Card";
+import Button from "./ui/Button";
 
 export default async function NextRaceCard() {
   const supabase = await createClient();
@@ -16,8 +17,7 @@ export default async function NextRaceCard() {
   if (!dalsiZavod) return null;
 
   return (
-    <section className="bg-black/90 backdrop-blur-sm border border-red-900 rounded-2xl p-4">
-
+    <Card className="mt-8">
       <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
         Další závod
       </p>
@@ -66,13 +66,10 @@ export default async function NextRaceCard() {
 
       </div>
 
-      <Link
-        href="/zavody"
-        className="inline-flex mt-6 border border-red-600 px-4 py-2 text-sm rounded-xl hover:bg-red-600 transition"
-      >
+      <Button href="/zavody" className="mt-6">
         Zobrazit kalendář
-      </Link>
+      </Button>
 
-    </section>
+    </Card>
   );
 }
