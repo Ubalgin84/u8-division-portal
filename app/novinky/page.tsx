@@ -1,14 +1,18 @@
-
 export const dynamic = "force-dynamic";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { supabase } from "../../lib/supabase";
+import Container from "../components/ui/Container";
+import Card from "../components/ui/Card";
+import Link from "next/link";
 
 export default async function NovinkyPage() {
   const { data: articles } = await supabase
     .from("articles")
     .select("*")
     .order("id", { ascending: false });
+
   const featuredArticle = articles?.[0] ?? null;
   const otherArticles = articles?.slice(1) ?? [];
 
@@ -19,121 +23,117 @@ export default async function NovinkyPage() {
         backgroundImage: "url('/hero-bg.png')",
       }}
     >
-      <div className="bg-black/60 min-h-screen">
+      <div className="min-h-screen bg-black/60">
         <Header />
 
-        <section className="pt-32 pb-20 text-center">
+        <Container>
+          <section className="pt-32 pb-20 text-center">
+            <p className="mt-6 text-sm uppercase tracking-[0.4em] text-red-500">
+              U8 Divisione News
+            </p>
 
-          <p className="text-red-500 uppercase tracking-[0.4em] text-sm mt-6">
-            U8 Divisione News
-          </p>
+            <h1 className="mt-6 text-7xl font-black">
+              NOVINKY
+            </h1>
 
-          <h1 className="text-7xl font-black mt-6">
-            NOVINKY
-          </h1>
+            <p className="mt-6 mb-8 text-gray-400">
+              Reportáže, výsledky a zákulisí týmu U8 Divisione.
+            </p>
+          </section>
 
-          <p className="text-gray-400 mt-6 mb-8">
-            Reportáže, výsledky a zákulisí týmu U8 Divisione.
-          </p>
+          <section className="pb-24">
+            {/* HLAVNÍ REPORTÁŽ */}
 
-
-        </section>
-
-        <section className="max-w-6xl mx-auto px-6 pb-24">
-
-          {/* HLAVNÍ REPORTÁŽ */}
-
-          {featuredArticle && (
-            <a
-              href={`/novinky/${featuredArticle.slug}`}
-              className="block mb-16"
-            >
-              <article className="border border-red-900 bg-black/70 rounded-xl overflow-hidden hover:border-red-500 transition duration-300">
-
-                {(featuredArticle.featured_image || featuredArticle.image_url) && (
-                  <img
-                    src={
-                      featuredArticle.featured_image ||
-                      featuredArticle.image_url ||
-                      "/hero-bg.png"
-                    }
-                    alt={featuredArticle.title}
-                    className="w-full aspect-[16/9] object-cover object-center"
-                  />
-                )}
-
-                <div className="p-10">
-
-                  <p className="text-red-500 uppercase font-bold tracking-widest mb-2">
-                    Hlavní reportáž
-                  </p>
-
-                  <h2 className="text-4xl font-black mb-4">
-                    {featuredArticle.title}
-                  </h2>
-
-                  <p className="text-gray-500 mb-4">
-                    {new Date(featuredArticle.created_at).toLocaleDateString("cs-CZ")}
-                  </p>
-
-                  <p className="text-xl text-gray-300 max-w-3xl">
-                    {featuredArticle.excerpt}
-                  </p>
-
-                </div>
-
-              </article>
-            </a>
-          )}
-
-          {/* OSTATNÍ REPORTÁŽE */}
-
-          <div className="grid md:grid-cols-3 gap-8 mt-10">
-
-            {otherArticles?.map((article) => (
-
-              <a
-                key={article.id}
-                href={`/novinky/${article.slug}`}
-                className="block group"
+            {featuredArticle && (
+              <Link
+                href={`/novinky/${featuredArticle.slug}`}
+                className="mb-16 block"
               >
-                <article className="border border-red-900 bg-black/70 rounded-xl overflow-hidden hover:border-red-500 hover:scale-[1.02] transition duration-300">
-                  {(article.featured_image || article.image_url) && (
-                    <img
-                      src={
-                        article.featured_image ||
-                        article.image_url ||
-                        "/hero-bg.png"
-                      }
-                      alt={article.title}
-                      className="w-full aspect-[16/9] object-cover object-center"
-                    />
-                  )}
+                <Card
+                  padded={false}
+                  className="overflow-hidden transition-colors duration-300 hover:border-red-500"
+                >
+                  {(featuredArticle.featured_image ||
+                    featuredArticle.image_url) && (
+                      <img
+                        src={
+                          featuredArticle.featured_image ||
+                          featuredArticle.image_url ||
+                          "/hero-bg.png"
+                        }
+                        alt={featuredArticle.title}
+                        className="aspect-[16/9] w-full object-cover object-center"
+                      />
+                    )}
 
-                  <div className="p-6">
-
-                    <h3 className="text-2xl font-black mb-3">
-                      {article.title}
-                    </h3>
-
-                    <p className="text-gray-400 mb-4">
-                      {article.excerpt}
+                  <div className="p-10">
+                    <p className="mb-2 font-bold uppercase tracking-widest text-red-500">
+                      Hlavní reportáž
                     </p>
 
-                    <p className="text-gray-500 text-xs">
-                      {article.track}
+                    <h2 className="mb-4 text-4xl font-black">
+                      {featuredArticle.title}
+                    </h2>
+
+                    <p className="mb-4 text-gray-500">
+                      {new Date(
+                        featuredArticle.created_at
+                      ).toLocaleDateString("cs-CZ")}
                     </p>
 
+                    <p className="max-w-3xl text-xl text-gray-300">
+                      {featuredArticle.excerpt}
+                    </p>
                   </div>
+                </Card>
+              </Link>
+            )}
 
-                </article>
-              </a>
+            {/* OSTATNÍ REPORTÁŽE */}
 
-            ))}
+            <div className="mt-10 grid gap-8 md:grid-cols-3">
+              {otherArticles?.map((article) => (
+                <Link
+                  key={article.id}
+                  href={`/novinky/${article.slug}`}
+                  className="group block"
+                >
+                  <Card
+                    padded={false}
+                    className="overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:border-red-500"
+                  >
+                    {(article.featured_image || article.image_url) && (
+                      <img
+                        src={
+                          article.featured_image ||
+                          article.image_url ||
+                          "/hero-bg.png"
+                        }
+                        alt={article.title}
+                        className="aspect-[16/9] w-full object-cover object-center"
+                      />
+                    )}
 
-          </div>
+                    <div className="p-6">
+                      <h3 className="mb-3 text-2xl font-black">
+                        {article.title}
+                      </h3>
 
-        </section>
+                      <p className="mb-4 text-gray-400">
+                        {article.excerpt}
+                      </p>
+
+                      <p className="text-xs text-gray-500">
+                        {article.track}
+                      </p>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </Container>
+
         <Footer />
       </div>
     </main>
