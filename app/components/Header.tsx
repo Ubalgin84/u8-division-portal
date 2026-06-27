@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Container from "./ui/Container";
-import Button from "./ui/Button";
 
 const navigation = [
   { href: "/", label: "Domů" },
@@ -19,58 +18,63 @@ const navigation = [
 export default function Header() {
   const pathname = usePathname();
   const [mobileMenu, setMobileMenu] = useState(false);
-  const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-black/90 border-b border-red-600 z-50">
-      <Container className="h-20">
-        <div className="flex items-center justify-between h-full">
+    <header className="fixed top-0 left-0 z-50 w-full border-b border-red-700 bg-black/90 backdrop-blur-md">
+      <Container className="h-16">
+        <div className="flex h-full items-center justify-between">
 
           {/* Logo */}
+
           <Link
             href="/"
-            className="flex flex-col leading-none hover:opacity-80 transition"
+            className="flex flex-col leading-none transition-opacity hover:opacity-80"
           >
-            <h1 className="text-4xl font-black text-white">
+            <h1 className="text-3xl font-black leading-none text-white">
               U8
             </h1>
 
-            <p className="text-red-500 text-sm font-bold uppercase tracking-widest">
+            <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.35em] text-red-500">
               DIVISIONE
             </p>
           </Link>
 
-          {/* Menu */}
-          <nav className="hidden md:flex gap-12 text-sm font-semibold uppercase text-white">
+          {/* Desktop Menu */}
+
+          <nav className="hidden items-center gap-10 text-[13px] font-semibold uppercase md:flex">
+
             {navigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={
-                  isActive(item.href)
-                    ? "text-red-500 font-bold"
-                    : "text-white hover:text-red-500 transition-colors duration-300"
+                  pathname === item.href
+                    ? "text-red-500"
+                    : "text-white transition-colors duration-300 hover:text-red-500"
                 }
               >
                 {item.label}
               </Link>
             ))}
+
           </nav>
 
-          {/* LIVE STREAM */}
-          <div className="flex items-center gap-4">
+          {/* Right */}
 
-            <Button
+          <div className="flex items-center gap-3">
+
+            <a
               href="https://twitch.tv/Ubalgin_8"
-              external
-              className="bg-red-600 border-red-600 hover:bg-red-700"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-md bg-red-600 px-4 py-1.5 text-xs font-bold uppercase tracking-wide transition-all duration-300 hover:bg-red-700"
             >
               LIVE STREAM
-            </Button>
+            </a>
 
             <button
               onClick={() => setMobileMenu(!mobileMenu)}
-              className="md:hidden text-white text-2xl"
+              className="text-xl text-white md:hidden"
             >
               {mobileMenu ? "✕" : "☰"}
             </button>
@@ -79,9 +83,12 @@ export default function Header() {
 
         </div>
       </Container>
+
       {mobileMenu && (
-        <div className="md:hidden bg-black border-t border-red-600">
-          <nav className="flex flex-col gap-4 p-6 uppercase font-semibold text-white">
+        <div className="border-t border-red-700 bg-black/95 backdrop-blur-md md:hidden">
+
+          <nav className="flex flex-col gap-5 p-6 text-sm font-semibold uppercase text-white">
+
             {navigation.map((item) => (
               <Link
                 key={item.href}
@@ -90,13 +97,15 @@ export default function Header() {
                 className={
                   pathname === item.href
                     ? "text-red-500"
-                    : "hover:text-red-500 transition-colors duration-300"
+                    : "transition-colors duration-300 hover:text-red-500"
                 }
               >
                 {item.label}
               </Link>
             ))}
+
           </nav>
+
         </div>
       )}
     </header>

@@ -1,7 +1,7 @@
 import { createClient } from "../../lib/supabase-server";
-import NextRaceCard from "./NextRaceCard";
 import Container from "./ui/Container";
 import FeaturedArticleCard from "./FeaturedArticleCard";
+import NextRaceCard from "./NextRaceCard";
 
 export default async function Hero() {
   const supabase = await createClient();
@@ -17,58 +17,62 @@ export default async function Hero() {
   return (
     <section
       id="domu"
-      className="relative min-h-[85vh]"
+      className="relative min-h-[74vh]"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/15" />
 
-      <Container className="relative z-10 flex flex-1">
+      <Container
+        size="wide"
+        className="relative z-10 pt-24 pb-20"
+      >
+        {/* HERO TEXT */}
 
-        <div className="flex w-full items-start justify-between gap-12 pt-20">
+        <div className="max-w-[640px] pt-16">
 
-          {/* LEVÁ STRANA */}
+          <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.45em] text-red-500">
+            Endurance. Chaos. Comeback.
+          </p>
 
-          <div className="max-w-[700px] flex-1">
+          <h1 className="text-[3rem] font-black leading-none text-white">
+            U8 DIVISIONE
+          </h1>
 
-            <p className="text-red-500 font-bold tracking-[0.45em] text-sm uppercase mb-6">
-              Endurance. Chaos. Comeback.
-            </p>
+          <h2 className="mt-3 text-[2.1rem] font-black leading-tight text-red-600">
+            KAŽDÝ ZÁVOD
+            <br />
+            ZANECHÁ STOPU.
+          </h2>
 
-            <h1 className="text-5xl xl:text-6xl font-black leading-none text-white">
-              U8 DIVISIONE
-            </h1>
+          <p className="mt-5 text-[11px] uppercase tracking-[0.28em] text-red-400">
+            Výsledky • Reportáže • Fotografie • Soundtracky
+          </p>
 
-            <h2 className="text-3xl xl:text-4xl font-black leading-none text-red-600 mt-3">
-              KAŽDÝ ZÁVOD
-              <br />
-              ZANECHÁ STOPU.
-            </h2>
+          <p className="mt-5 max-w-[620px] text-base leading-7 text-gray-300">
+            Vytváříme příběhy inspirované skutečnými závody U8 Divisione.
+            Každý závod se stává součástí historie – od výsledku přes report
+            až po vlastní soundtrack.
+          </p>
 
-            <p className="text-red-400 uppercase tracking-[0.25em] mt-6 text-sm">
-              Výsledky • Reportáže • Fotografie • Soundtracky
-            </p>
+        </div>
 
-            <p className="text-lg text-gray-300 mt-6 max-w-xl leading-relaxed">
-              Vytváříme příběhy inspirované skutečnými závody U8 Divisione.
-              Každý závod se stává součástí historie — od výsledku přes report
-              až po vlastní soundtrack.
-            </p>
+        {/* HERO CARDS */}
+
+        <div className="mt-16 mb-20 flex justify-center">
+
+          <div className="grid w-full max-w-[1040px] grid-cols-1 gap-6 xl:grid-cols-2">
 
             {featuredArticle && (
               <FeaturedArticleCard article={featuredArticle} />
             )}
 
-          </div>
-
-          {/* PRAVÁ STRANA */}
-
-          <div className="hidden xl:block w-full max-w-[360px] flex-shrink-0">
             <NextRaceCard />
+
           </div>
 
         </div>
 
-
       </Container>
-    </section >
+    </section>
   );
 }

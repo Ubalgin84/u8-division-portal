@@ -7,18 +7,17 @@ import Footer from "./components/Footer";
 export default async function Home() {
   return (
     <main
-      className="h-screen overflow-hidden text-white bg-cover bg-center"
+      className="min-h-screen text-white bg-cover bg-center bg-fixed"
       style={{
         backgroundImage: "url('/hero-bg.png')",
       }}
     >
-      <div className="relative h-screen bg-black/60">
+      <div className="min-h-screen bg-black/60">
 
         <Header />
 
         <Hero />
 
-        
         <Footer />
 
       </div>

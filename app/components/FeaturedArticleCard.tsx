@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
 
@@ -15,26 +14,30 @@ type Props = {
 
 export default function FeaturedArticleCard({ article }: Props) {
   return (
-    <Card className="mt-8 max-w-md">
-      <p className="mb-4 text-sm uppercase tracking-[0.25em] text-red-500">
+    <Card className="h-full flex flex-col p-6">
+
+      <p className="text-xs uppercase tracking-[0.35em] text-red-500 mb-4">
         Poslední reportáž
       </p>
 
-      <p className="mb-3 text-xs text-gray-500">
+      <p className="text-xs text-gray-500 mb-4">
         {article.race_date}
       </p>
 
-      <h3 className="mb-3 text-xl font-black text-white">
+      <h3 className="text-2xl font-black leading-tight text-white mb-5">
         {article.title}
       </h3>
 
-      <p className="mb-5 line-clamp-3 text-gray-400">
+      <p className="text-gray-400 leading-relaxed flex-1">
         {article.excerpt}
       </p>
 
-      <Button href={`/novinky/${article.slug}`}>
-        Číst reportáž
-      </Button>
+      <div className="mt-8">
+        <Button href={`/novinky/${article.slug}`}>
+          Číst reportáž
+        </Button>
+      </div>
+
     </Card>
   );
 }

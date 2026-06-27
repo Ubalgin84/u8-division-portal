@@ -26,17 +26,17 @@ export default async function NovinkyPage() {
       <div className="min-h-screen bg-black/60">
         <Header />
 
-        <Container>
-          <section className="pt-32 pb-20 text-center">
+        <Container size="wide">
+          <section className="pt-32 pb-16 text-center">
             <p className="mt-6 text-sm uppercase tracking-[0.4em] text-red-500">
               U8 Divisione News
             </p>
 
-            <h1 className="mt-6 text-7xl font-black">
+            <h1 className="mt-6 text-6xl xl:text-7xl font-black">
               NOVINKY
             </h1>
 
-            <p className="mt-6 mb-8 text-gray-400">
+            <p className="mt-5 text-lg text-gray-400">
               Reportáže, výsledky a zákulisí týmu U8 Divisione.
             </p>
           </section>
