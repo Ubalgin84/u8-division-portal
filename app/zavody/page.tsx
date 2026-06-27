@@ -4,7 +4,7 @@ import Countdown from "../components/Countdown";
 import { createClient } from "@/lib/supabase-server";
 
 import Image from "next/image";
-import { trackImages } from "@/lib/trackImages";
+import { getTrackImage } from "@/lib/trackImages";
 import Container from "../components/ui/Container";
 
 
@@ -160,7 +160,7 @@ export default async function ZavodyPage() {
                                 <div className="relative min-h-[340px]">
 
                                     <Image
-                                        src={trackImages[dalsiZavod?.track || ""] || "/hero-bg.png"}
+                                        src={getTrackImage(dalsiZavod?.track)}
                                         alt={dalsiZavod?.track || "Další závod"}
                                         fill
                                         className="object-cover"
@@ -197,7 +197,7 @@ export default async function ZavodyPage() {
                                         className="overflow-hidden bg-black/80 border border-red-900 rounded-2xl hover:border-red-600 transition-all duration-300 hover:scale-[1.02]">
                                         <div className="relative h-64 w-full">
                                             <Image
-                                                src={trackImages[zavod.track] || "/hero-bg.png"}
+                                                src={getTrackImage(zavod.track)}
                                                 alt={zavod.track}
                                                 fill
                                                 className="object-cover"
@@ -281,7 +281,7 @@ export default async function ZavodyPage() {
                                     >
                                         <div className="relative h-64 w-full">
                                             <Image
-                                                src={trackImages[zavod.track] || "/hero-bg.png"}
+                                                src={getTrackImage(zavod.track)}
                                                 alt={zavod.track}
                                                 fill
                                                 className="object-cover grayscale"

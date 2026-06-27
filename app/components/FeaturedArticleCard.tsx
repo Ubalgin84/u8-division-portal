@@ -6,6 +6,7 @@ type FeaturedArticle = {
   title: string;
   excerpt: string;
   slug: string;
+  track: string;
 };
 
 type Props = {
@@ -14,7 +15,7 @@ type Props = {
 
 export default function FeaturedArticleCard({ article }: Props) {
   return (
-    <Card className="h-full flex flex-col p-6">
+    <Card className="relative h-[390px] flex flex-col p-6">
 
       <p className="text-xs uppercase tracking-[0.35em] text-red-500 mb-4">
         Poslední reportáž
@@ -24,11 +25,11 @@ export default function FeaturedArticleCard({ article }: Props) {
         {article.race_date}
       </p>
 
-      <h3 className="text-2xl font-black leading-tight text-white mb-5">
+      <h3 className="text-xl font-black leading-tight text-white mb-5">
         {article.title}
       </h3>
 
-      <p className="text-gray-400 leading-relaxed flex-1">
+      <p className="text-gray-400 leading-8 flex-1">
         {article.excerpt}
       </p>
 

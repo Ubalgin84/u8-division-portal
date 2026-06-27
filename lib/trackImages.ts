@@ -1,21 +1,64 @@
-export const trackImages: Record<string, string> = {
-    "Spa-Francorchamps": "/tracks/spa.jpg",
-    "Monza": "/tracks/monza.jpg",
-    "Watkins Glen": "/tracks/watkins-glen.jpg",
-    "Nürburgring": "/tracks/nurburgring.jpg",
-    "Mount Panorama": "/tracks/mount-panorama.jpg",
-    "Road Atlanta": "/tracks/road-atlanta.jpg",
-    "Virginia International Raceway": "/tracks/vir.jpg",
-    "Adelaide Street Circuit": "/tracks/adelaide.jpg",
-    "Hockenheimring": "/tracks/hockenheim.jpg",
-    "Circuit des 24 Heures du Mans": "/tracks/lemans.jpg",
-    "Indianapolis Motor Speedway": "/tracks/indianapolis.jpg",
-    "St. Petersburg Grand Prix": "/tracks/st-petersburg.jpg",
-    "Red Bull Ring": "/tracks/red-bull-ring.jpg",
-    "Suzuka International Racing Course": "/tracks/suzuka.jpg",
-    "Autódromo José Carlos Pace": "/tracks/interlagos.jpg",
-    "Fuji International Speedway": "/tracks/fuji.jpg",
-    "Daytona International Speedway": "/tracks/daytona.jpg",
-    "Mobility Resort Motegi": "/tracks/motegi.jpg",
-    "Road America": "/tracks/road-america.jpg",
-};
+export function getTrackImage(track?: string): string {
+  if (!track) return "/hero-bg.png";
+
+  const t = track.toLowerCase();
+
+  if (t.includes("spa"))
+    return "/tracks/spa.jpg";
+
+  if (t.includes("monza"))
+    return "/tracks/monza.jpg";
+
+  if (t.includes("watkins"))
+    return "/tracks/watkins-glen.jpg";
+
+  if (t.includes("nürburgring") || t.includes("nurburgring"))
+    return "/tracks/nurburgring.jpg";
+
+  if (t.includes("mount panorama") || t.includes("bathurst"))
+    return "/tracks/mount-panorama.jpg";
+
+  if (t.includes("road atlanta"))
+    return "/tracks/road-atlanta.jpg";
+
+  if (t.includes("road america"))
+    return "/tracks/road-america.jpg";
+
+  if (t.includes("vir") || t.includes("virginia"))
+    return "/tracks/vir.jpg";
+
+  if (t.includes("adelaide"))
+    return "/tracks/adelaide.jpg";
+
+  if (t.includes("hockenheim"))
+    return "/tracks/hockenheim.jpg";
+
+  if (t.includes("le mans") || t.includes("24 heures"))
+    return "/tracks/lemans.jpg";
+
+  if (t.includes("indianapolis"))
+    return "/tracks/indianapolis.jpg";
+
+  if (t.includes("st. petersburg") || t.includes("st petersburg"))
+    return "/tracks/st-petersburg.jpg";
+
+  if (t.includes("red bull"))
+    return "/tracks/red-bull-ring.jpg";
+
+  if (t.includes("suzuka"))
+    return "/tracks/suzuka.jpg";
+
+  if (t.includes("josé") || t.includes("interlagos"))
+    return "/tracks/interlagos.jpg";
+
+  if (t.includes("fuji"))
+    return "/tracks/fuji.jpg";
+
+  if (t.includes("daytona"))
+    return "/tracks/daytona.jpg";
+
+  if (t.includes("motegi"))
+    return "/tracks/motegi.jpg";
+
+  return "/hero-bg.png";
+}
