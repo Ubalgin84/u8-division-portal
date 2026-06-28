@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ewfkgxodppiutcrzrrlm.supabase.co",
+      },
+    ],
+  },
+
   async headers() {
     return [
       {
@@ -20,8 +29,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Permissions-Policy",
-            value:
-              "camera=(), microphone=(), geolocation=()",
+            value: "camera=(), microphone=(), geolocation=()",
           },
         ],
       },
