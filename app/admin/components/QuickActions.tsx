@@ -31,12 +31,12 @@ export default function QuickActions() {
                 </Link>
 
                 <Link
-                    href="/admin/media"
+                    href="/admin/hudba"
                     className="bg-black/70 border border-red-900 rounded-2xl p-6 hover:border-red-500 hover:bg-red-950/20 transition"
                 >
                     <p className="text-3xl mb-3">🎵</p>
                     <h3 className="font-bold">
-                        Přidat skladbu
+                        Hudební knihovna
                     </h3>
                 </Link>
 
