@@ -1,36 +1,141 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Container from "../../components/ui/Container";
+import PageHero from "../../components/ui/PageHero";
+import Section from "../../components/ui/Section";
+import { createClient } from "@/lib/supabase-server";
+import { getTeamStats } from "@/lib/stats";
+import StatCard from "../../components/ui/StatCard";
+import StatsGrid from "../../components/ui/StatsGrid";
+import StatsSection from "../../components/ui/StatsSection";
 
-export default function StatistikyPage() {
-  return (
-    <main
-      className="min-h-screen text-white bg-cover bg-center bg-fixed"
-      style={{
-        backgroundImage: "url('/hero-bg.png')",
-      }}
-    >
-      <div className="min-h-screen bg-black/60">
-        <Header />
+export default async function StatistikyPage() {
 
-        <Container size="wide">
-          <section className="pt-32 pb-24 text-center">
-            <p className="text-sm uppercase tracking-[0.4em] text-red-500">
-              U8 Divisione
-            </p>
+    const supabase = await createClient();
 
-            <h1 className="mt-6 text-6xl xl:text-7xl font-black">
-              STATISTIKY
-            </h1>
+    const { data: results } = await supabase
+        .from("results")
+        .select("*");
 
-            <p className="mt-5 text-lg text-gray-400">
-              Statistiky týmu budou brzy dostupné.
-            </p>
-          </section>
-        </Container>
+    const stats = getTeamStats(results || []);
 
-        <Footer />
-      </div>
-    </main>
-  );
+    return (
+        <main
+            className="min-h-screen text-white bg-cover bg-center bg-fixed"
+            style={{
+                backgroundImage: "url('/hero-bg.png')",
+            }}
+        >
+            <div className="min-h-screen bg-black/60">
+                <Header />
+
+                <Container size="wide">
+                    <PageHero
+                        eyebrow="U8 Divisione"
+                        title="STATISTIKY"
+                        description="Komplexní přehled statistik U8 Divisione."
+                    />
+
+                    <Section>
+
+                        <StatsSection
+                            title="Základní statistiky"
+                            icon="📊"
+                        >
+
+                            <StatsGrid>
+
+                                <StatCard
+                                    value={stats.totalRaces}
+                                    label="Celkem závodů"
+                                />
+
+                                <StatCard
+                                    value={stats.totalPoints}
+                                    label="Celkem bodů"
+                                />
+
+                                <StatCard
+                                    value={stats.wins}
+                                    label="Vítězství"
+                                />
+
+                                <StatCard
+                                    value={stats.podiums}
+                                    label="Pódia"
+                                />
+
+                            </StatsGrid>
+
+                        </StatsSection>
+                        <StatsSection
+                            title="Výkonnost"
+                            icon="📈"
+                        >
+
+                            <StatsGrid>
+
+                                <StatCard
+                                    value={`P${stats.averageFinish}`}
+                                    label="Průměrné umístění"
+                                />
+
+                                <StatCard
+                                    value={`P${stats.bestFinish}`}
+                                    label="Nejlepší výsledek"
+                                />
+
+                                <StatCard
+                                    value={`P${stats.worstFinish}`}
+                                    label="Nejhorší výsledek"
+                                />
+
+                                <StatCard
+                                    value={stats.top5}
+                                    label="Top 5"
+                                />
+
+                            </StatsGrid>
+
+                        </StatsSection>
+                        <StatsSection
+                            title="Technika"
+                            icon="🚗"
+                        >
+
+                            <StatsGrid>
+
+                                <StatCard
+                                    value={stats.favoriteCar}
+                                    label="Nejpoužívanější vůz"
+                                    small
+                                />
+
+                                <StatCard
+                                    value={stats.favoriteTrack}
+                                    label="Nejoblíbenější trať"
+                                    small
+                                />
+
+                                <StatCard
+                                    value={stats.averageIncidents}
+                                    label="Průměr incidentů"
+                                />
+
+                                <StatCard
+                                    value={stats.averagePoints}
+                                    label="Průměr bodů"
+                                />
+
+                            </StatsGrid>
+
+                        </StatsSection>
+
+                    </Section>
+                </Container>
+
+                <Footer />
+            </div>
+        </main>
+    );
 }

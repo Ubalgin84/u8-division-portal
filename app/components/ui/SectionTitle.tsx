@@ -20,7 +20,7 @@ export default function SectionTitle({
         </p>
       )}
 
-      <h2 className="text-5xl font-black">
+      <h2 className="text-3xl xl:text-4xl font-black">
         {children}
       </h2>
 

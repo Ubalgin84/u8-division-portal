@@ -2,7 +2,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Container from "../components/ui/Container";
 import { supabase } from "../../lib/supabase";
-import ResultsTabs from "../components/ResultsTabs";
 import PageHero from "../components/ui/PageHero";
 import StatCard from "../components/ui/StatCard";
 import Section from "../components/ui/Section";
@@ -75,9 +74,7 @@ export default async function VysledkyPage() {
             description="Přehled všech závodů, získaných bodů a dosažených výsledků."
           />
 
-          <ResultsTabs active="overview" />
-
-
+        
           {/* STATISTIKY */}
 
           <Section>

@@ -5,6 +5,11 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { supabase } from "../../../lib/supabase";
 import { notFound } from "next/navigation";
+import RaceHero from "../../components/race/RaceHero";
+import RaceStats from "../../components/race/RaceStats";
+import RaceMusic from "../../components/race/RaceMusic";
+import RaceReaction from "../../components/race/RaceReaction";
+import { getRace } from "@/lib/race";
 
 export async function generateMetadata({
   params,
@@ -77,6 +82,8 @@ export default async function ArticlePage({
     notFound();
   }
 
+  // const race = await getRace(article.slug);
+
   return (
     <main
       className="min-h-screen text-white bg-cover bg-center bg-fixed"
@@ -90,237 +97,19 @@ export default async function ArticlePage({
 
         <section className="max-w-6xl mx-auto px-6 pt-32 pb-24">
 
-          <div className="text-center mb-16">
+          <RaceHero article={article} />
 
-            <p className="text-red-500 uppercase tracking-[0.4em] mb-4">
-              U8 DIVISIONE REPORT
-            </p>
-
-            <h1 className="text-7xl font-black mb-6">
-              {article.title}
-            </h1>
-
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
-              {article.excerpt}
-            </p>
-            {(article.featured_image || article.image_url) && (
-              <img
-                src={article.featured_image || article.image_url}
-                alt={article.title}
-                className="w-full max-w-5xl mx-auto rounded-2xl border border-red-900 mt-12 mb-12 object-cover"
-              />
-            )}
-
-          </div>
           <div className="bg-black/60 border border-red-900 rounded-2xl p-12 max-w-5xl mx-auto">
 
             <div className="whitespace-pre-wrap text-xl leading-[2.2] text-gray-200">
               {article.content}
             </div>
-            <div className="mt-16 border-t border-red-900 pt-10">
 
-              <h2 className="text-3xl font-black mb-8">
-                Závodní data
-              </h2>
+            <RaceStats article={article} />
 
-              <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <RaceMusic article={article} />
 
-                <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
-                  <p className="text-gray-500 uppercase text-sm">
-                    Start
-                  </p>
-
-                  <p className="text-5xl font-black mt-2">
-                    P{article.start_pos}
-                  </p>
-                </div>
-
-                <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
-                  <p className="text-gray-500 uppercase text-sm">
-                    Cíl
-                  </p>
-
-                  <p className="text-5xl font-black mt-2 text-red-500">
-                    P{article.finish_pos}
-                  </p>
-                </div>
-
-                <div className="bg-black/50 border border-red-900 rounded-xl p-6 text-center">
-                  <p className="text-gray-500 uppercase text-sm">
-                    Body
-                  </p>
-
-                  <p className="text-5xl font-black mt-2">
-                    {article.points}
-                  </p>
-                </div>
-
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Datum
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.race_date}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Trať
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.track}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Vůz
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.car}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Posádka
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.crew}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Počasí
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.weather}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Délka
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.race_length}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Pit stopy
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.pit_stops || "Neuvedeno"}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Nejlepší kolo
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.fastest_lap || "Neuvedeno"}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Safety Car
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.safety_car || "Ne"}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 uppercase text-sm">
-                    Změna počasí
-                  </p>
-
-                  <p className="text-xl font-bold">
-                    {article.weather_change || "Ne"}
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-            {(article.music_file || article.music_url) && (
-              <div className="mt-16 border-t border-red-900 pt-10">
-
-                <h2 className="text-3xl font-black mb-8">
-                  🎵 Soundtrack závodu
-                </h2>
-
-                {article.music_title && (
-                  <p className="text-xl font-bold text-red-500 mb-6">
-                    {article.music_title}
-                  </p>
-                )}
-
-                {article.music_file && (
-                  <audio
-                    controls
-                    className="w-full mb-6"
-                  >
-                    <source
-                      src={article.music_file}
-                      type="audio/mpeg"
-                    />
-                    Váš prohlížeč nepodporuje audio přehrávač.
-                  </audio>
-                )}
-
-                {article.music_url && (
-                  <a
-                    href={article.music_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block px-6 py-3 bg-red-600 rounded-xl font-bold hover:bg-red-700 transition"
-                  >
-                    ▶ Otevřít na YouTube
-                  </a>
-                )}
-
-              </div>
-            )}
-            {article.team_reaction && (
-              <div className="mt-16 border-t border-red-900 pt-10">
-
-                <h2 className="text-3xl font-black mb-8">
-                  Reakce týmu
-                </h2>
-
-                <div className="border-l-4 border-red-500 pl-6 py-2">
-
-                  <p className="text-2xl italic text-gray-200 leading-10">
-                    "{article.team_reaction}"
-                  </p>
-
-                  <p className="mt-4 text-red-500 uppercase tracking-widest text-sm">
-                    U8 Divisione
-                  </p>
-
-                </div>
-
-              </div>
-            )}
+            <RaceReaction article={article} />
 
           </div>
         </section>

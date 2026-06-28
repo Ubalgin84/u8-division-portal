@@ -8,7 +8,17 @@ import Container from "./ui/Container";
 const navigation = [
   { href: "/", label: "Domů" },
   { href: "/novinky", label: "Novinky" },
-  { href: "/vysledky", label: "Výsledky" },
+
+  {
+    href: "/vysledky",
+    label: "Výsledky",
+    children: [
+      { href: "/vysledky", label: "Přehled" },
+      { href: "/vysledky/statistiky", label: "Statistiky" },
+      { href: "/vysledky/rekordy", label: "Rekordy" },
+    ],
+  },
+
   { href: "/tym", label: "Tým" },
   { href: "/zavody", label: "Závody" },
   { href: "/hudba", label: "Hudba" },
@@ -43,19 +53,69 @@ export default function Header() {
 
           <nav className="hidden items-center gap-10 text-[13px] font-semibold uppercase md:flex">
 
-            {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={
-                  pathname === item.href
-                    ? "text-red-500"
-                    : "text-white transition-colors duration-300 hover:text-red-500"
-                }
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+
+              if (item.children) {
+                return (
+                  <div
+                    key={item.href}
+                    className="group relative"
+                  >
+                    <Link
+                      href={item.href}
+                      className={
+                        pathname.startsWith("/vysledky")
+                          ? "text-red-500"
+                          : "text-white transition-colors duration-300 hover:text-red-500"
+                      }
+                    >
+                      <span className="flex items-center gap-1">
+                        {item.label}
+                        <span className="text-[10px] transition-transform duration-300 group-hover:rotate-180">
+                          ▼
+                        </span>
+                      </span>
+                    </Link>
+
+                    <div className="absolute left-1/2 top-full hidden w-52 -translate-x-1/2 pt-4 group-hover:block">
+
+                      <div className="rounded-2xl border border-red-900 bg-black/95 backdrop-blur-md overflow-hidden">
+
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className={`block px-5 py-3 text-sm normal-case transition hover:bg-red-950/60 ${pathname === child.href
+                              ? "text-red-500"
+                              : "text-white"
+                              }`}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={
+                    pathname === item.href
+                      ? "text-red-500"
+                      : "text-white transition-colors duration-300 hover:text-red-500"
+                  }
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
 
           </nav>
 
