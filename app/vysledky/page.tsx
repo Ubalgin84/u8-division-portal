@@ -2,6 +2,11 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Container from "../components/ui/Container";
 import { supabase } from "../../lib/supabase";
+import ResultsTabs from "../components/ResultsTabs";
+import PageHero from "../components/ui/PageHero";
+import StatCard from "../components/ui/StatCard";
+import Section from "../components/ui/Section";
+import TableCard from "../components/ui/TableCard";
 
 export const dynamic = "force-dynamic";
 
@@ -32,21 +37,21 @@ export default async function VysledkyPage() {
   const averageFinish =
     results?.length
       ? (
-          results.reduce(
-            (sum: number, race: any) =>
-              sum + (race.finish_pos || 0),
-            0
-          ) / results.length
-        ).toFixed(1)
+        results.reduce(
+          (sum: number, race: any) =>
+            sum + (race.finish_pos || 0),
+          0
+        ) / results.length
+      ).toFixed(1)
       : "-";
 
   const bestFinish =
     results?.length
       ? Math.min(
-          ...results.map(
-            (race: any) => race.finish_pos || 999
-          )
+        ...results.map(
+          (race: any) => race.finish_pos || 999
         )
+      )
       : "-";
 
   return (
@@ -64,93 +69,40 @@ export default async function VysledkyPage() {
 
           {/* HERO */}
 
-          <section className="pt-32 pb-16 text-center">
+          <PageHero
+            eyebrow="U8 Divisione"
+            title="VÝSLEDKY"
+            description="Přehled všech závodů, získaných bodů a dosažených výsledků."
+          />
 
-            <p className="text-sm uppercase tracking-[0.4em] text-red-500">
-              U8 Divisione
-            </p>
+          <ResultsTabs active="overview" />
 
-            <h1 className="mt-6 text-6xl xl:text-7xl font-black">
-              VÝSLEDKY
-            </h1>
-
-            <p className="mt-5 text-lg text-gray-400">
-              Přehled všech závodů, získaných bodů a dosažených výsledků.
-            </p>
-
-          </section>
 
           {/* STATISTIKY */}
 
-          <section className="pb-24">
+          <Section>
+
 
             <div className="grid gap-6 md:grid-cols-3 xl:grid-cols-6 mb-12">
 
-              <div className="rounded-2xl border border-red-900 bg-black/70 p-6 backdrop-blur-sm">
-                <p className="text-sm uppercase text-gray-400">
-                  Závody
-                </p>
+              <StatCard value={totalRaces} label="Závody" />
 
-                <h3 className="mt-2 text-4xl font-black text-red-500">
-                  {totalRaces}
-                </h3>
-              </div>
+              <StatCard value={totalPoints} label="Body" />
 
-              <div className="rounded-2xl border border-red-900 bg-black/70 p-6 backdrop-blur-sm">
-                <p className="text-sm uppercase text-gray-400">
-                  Body
-                </p>
+              <StatCard value={podiums} label="Pódia" />
 
-                <h3 className="mt-2 text-4xl font-black text-red-500">
-                  {totalPoints}
-                </h3>
-              </div>
+              <StatCard value={wins} label="Vítězství" />
 
-              <div className="rounded-2xl border border-red-900 bg-black/70 p-6 backdrop-blur-sm">
-                <p className="text-sm uppercase text-gray-400">
-                  Pódia
-                </p>
+              <StatCard value={`P${averageFinish}`} label="Průměr" />
 
-                <h3 className="mt-2 text-4xl font-black text-red-500">
-                  {podiums}
-                </h3>
-              </div>
-
-              <div className="rounded-2xl border border-red-900 bg-black/70 p-6 backdrop-blur-sm">
-                <p className="text-sm uppercase text-gray-400">
-                  Vítězství
-                </p>
-
-                <h3 className="mt-2 text-4xl font-black text-red-500">
-                  {wins}
-                </h3>
-              </div>
-
-              <div className="rounded-2xl border border-red-900 bg-black/70 p-6 backdrop-blur-sm">
-                <p className="text-sm uppercase text-gray-400">
-                  Průměr
-                </p>
-
-                <h3 className="mt-2 text-4xl font-black text-red-500">
-                  P{averageFinish}
-                </h3>
-              </div>
-
-              <div className="rounded-2xl border border-red-900 bg-black/70 p-6 backdrop-blur-sm">
-                <p className="text-sm uppercase text-gray-400">
-                  Nejlepší výsledek
-                </p>
-
-                <h3 className="mt-2 text-4xl font-black text-red-500">
-                  P{bestFinish}
-                </h3>
-              </div>
+              <StatCard value={`P${bestFinish}`} label="Nejlepší výsledek" />
 
             </div>
 
+
             {/* TABULKA */}
 
-            <div className="overflow-hidden rounded-2xl border border-red-900 bg-black/70 backdrop-blur-sm">
+            <TableCard>
 
               <table className="w-full">
 
@@ -182,10 +134,10 @@ export default async function VysledkyPage() {
                       <td className="p-5">
                         {race.race_date
                           ? new Intl.DateTimeFormat("cs-CZ", {
-                              day: "numeric",
-                              month: "numeric",
-                              year: "numeric",
-                            }).format(new Date(race.race_date))
+                            day: "numeric",
+                            month: "numeric",
+                            year: "numeric",
+                          }).format(new Date(race.race_date))
                           : "-"}
                       </td>
 
@@ -202,15 +154,14 @@ export default async function VysledkyPage() {
                       </td>
 
                       <td
-                        className={`text-center font-bold ${
-                          race.finish_pos === 1
-                            ? "text-yellow-400"
-                            : race.finish_pos === 2
+                        className={`text-center font-bold ${race.finish_pos === 1
+                          ? "text-yellow-400"
+                          : race.finish_pos === 2
                             ? "text-gray-300"
                             : race.finish_pos === 3
-                            ? "text-amber-600"
-                            : "text-red-500"
-                        }`}
+                              ? "text-amber-600"
+                              : "text-red-500"
+                          }`}
                       >
                         P{race.finish_pos}
                       </td>
@@ -248,15 +199,15 @@ export default async function VysledkyPage() {
 
               </table>
 
-            </div>
+            </TableCard>
 
-          </section>
+          </Section>
 
         </Container>
 
         <Footer />
 
       </div>
-    </main>
+    </main >
   );
 }
