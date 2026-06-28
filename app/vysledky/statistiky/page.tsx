@@ -8,6 +8,13 @@ import { getTeamStats } from "@/lib/stats";
 import StatCard from "../../components/ui/StatCard";
 import StatsGrid from "../../components/ui/StatsGrid";
 import StatsSection from "../../components/ui/StatsSection";
+import SectionHeading from "../../components/ui/SectionHeading";
+import {
+    ChartColumn,
+    TrendingUp,
+    CarFront,
+} from "lucide-react";
+
 
 export default async function StatistikyPage() {
 
@@ -38,104 +45,111 @@ export default async function StatistikyPage() {
 
                     <Section>
 
-                        <StatsSection
-                            title="Základní statistiky"
-                            icon="📊"
+
+                        <SectionHeading
+                            icon={ChartColumn}
+                            centered
                         >
+                            Základní statistiky
+                        </SectionHeading>
 
-                            <StatsGrid>
+                        <StatsGrid>
 
-                                <StatCard
-                                    value={stats.totalRaces}
-                                    label="Celkem závodů"
-                                />
+                            <StatCard
+                                value={stats.totalRaces}
+                                label="Celkem závodů"
+                            />
 
-                                <StatCard
-                                    value={stats.totalPoints}
-                                    label="Celkem bodů"
-                                />
+                            <StatCard
+                                value={stats.totalPoints}
+                                label="Celkem bodů"
+                            />
 
-                                <StatCard
-                                    value={stats.wins}
-                                    label="Vítězství"
-                                />
+                            <StatCard
+                                value={stats.wins}
+                                label="Vítězství"
+                            />
 
-                                <StatCard
-                                    value={stats.podiums}
-                                    label="Pódia"
-                                />
+                            <StatCard
+                                value={stats.podiums}
+                                label="Pódia"
+                            />
 
-                            </StatsGrid>
+                        </StatsGrid>
 
-                        </StatsSection>
-                        <StatsSection
-                            title="Výkonnost"
-                            icon="📈"
+
+                        <SectionHeading
+                            icon={TrendingUp}
+                            centered
                         >
+                            Výkonnost
+                        </SectionHeading>
 
-                            <StatsGrid>
 
-                                <StatCard
-                                    value={`P${stats.averageFinish}`}
-                                    label="Průměrné umístění"
-                                />
+                        <StatsGrid>
 
-                                <StatCard
-                                    value={`P${stats.bestFinish}`}
-                                    label="Nejlepší výsledek"
-                                />
+                            <StatCard
+                                value={`P${stats.averageFinish}`}
+                                label="Průměrné umístění"
+                            />
 
-                                <StatCard
-                                    value={`P${stats.worstFinish}`}
-                                    label="Nejhorší výsledek"
-                                />
+                            <StatCard
+                                value={`P${stats.bestFinish}`}
+                                label="Nejlepší výsledek"
+                            />
 
-                                <StatCard
-                                    value={stats.top5}
-                                    label="Top 5"
-                                />
+                            <StatCard
+                                value={`P${stats.worstFinish}`}
+                                label="Nejhorší výsledek"
+                            />
 
-                            </StatsGrid>
+                            <StatCard
+                                value={stats.top5}
+                                label="Top 5"
+                            />
 
-                        </StatsSection>
-                        <StatsSection
-                            title="Technika"
-                            icon="🚗"
+                        </StatsGrid>
+
+
+                        <SectionHeading
+                            icon={CarFront}
+                            centered
                         >
+                            Technika
+                        </SectionHeading>
 
-                            <StatsGrid>
+                        <StatsGrid>
 
-                                <StatCard
-                                    value={stats.favoriteCar}
-                                    label="Nejpoužívanější vůz"
-                                    small
-                                />
+                            <StatCard
+                                value={stats.favoriteCar}
+                                label="Nejpoužívanější vůz"
+                                small
+                            />
 
-                                <StatCard
-                                    value={stats.favoriteTrack}
-                                    label="Nejoblíbenější trať"
-                                    small
-                                />
+                            <StatCard
+                                value={stats.favoriteTrack}
+                                label="Nejoblíbenější trať"
+                                small
+                            />
 
-                                <StatCard
-                                    value={stats.averageIncidents}
-                                    label="Průměr incidentů"
-                                />
+                            <StatCard
+                                value={stats.averageIncidents}
+                                label="Průměr incidentů"
+                            />
 
-                                <StatCard
-                                    value={stats.averagePoints}
-                                    label="Průměr bodů"
-                                />
+                            <StatCard
+                                value={stats.averagePoints}
+                                label="Průměr bodů"
+                            />
 
-                            </StatsGrid>
+                        </StatsGrid>
 
-                        </StatsSection>
 
                     </Section>
                 </Container>
 
                 <Footer />
             </div>
-        </main>
+        </main >
     );
 }

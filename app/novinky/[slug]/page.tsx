@@ -10,6 +10,9 @@ import RaceStats from "../../components/race/RaceStats";
 import RaceMusic from "../../components/race/RaceMusic";
 import RaceReaction from "../../components/race/RaceReaction";
 import { getRace } from "@/lib/race";
+import RaceContent from "../../components/race/RaceContent";
+import RaceSummary from "../../components/race/RaceSummary";
+
 
 export async function generateMetadata({
   params,
@@ -99,11 +102,11 @@ export default async function ArticlePage({
 
           <RaceHero article={article} />
 
+          <RaceSummary article={article} />
+
           <div className="bg-black/60 border border-red-900 rounded-2xl p-12 max-w-5xl mx-auto">
 
-            <div className="whitespace-pre-wrap text-xl leading-[2.2] text-gray-200">
-              {article.content}
-            </div>
+            <RaceContent content={article.content} />
 
             <RaceStats article={article} />
 
