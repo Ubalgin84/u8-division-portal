@@ -2,25 +2,27 @@ type PageHeroProps = {
   eyebrow: string;
   title: string;
   description: string;
+  className?: string;
 };
 
 export default function PageHero({
   eyebrow,
   title,
   description,
+  className = "",
 }: PageHeroProps) {
   return (
-    <section className="pt-32 pb-16 text-center">
+    <section className={`pt-20 pb-10 text-center ${className}`}>
 
-      <p className="text-sm uppercase tracking-[0.4em] text-red-500">
+      <p className="text-xs uppercase tracking-[0.45em] text-red-500">
         {eyebrow}
       </p>
 
-      <h1 className="mt-6 text-6xl xl:text-7xl font-black">
+      <h1 className="mt-4 text-5xl font-black uppercase text-white md:text-6xl">
         {title}
       </h1>
 
-      <p className="mt-5 text-lg text-gray-400 max-w-3xl mx-auto">
+      <p className="mx-auto mt-5 max-w-2xl text-lg text-gray-400">
         {description}
       </p>
 

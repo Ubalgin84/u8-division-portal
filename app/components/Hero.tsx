@@ -28,7 +28,7 @@ export default async function Hero() {
       >
         {/* HERO TEXT */}
 
-        <div className="max-w-[640px] pt-16">
+        <div className="max-w-[640px] pt-12">
 
           <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.45em] text-red-500">
             Endurance. Chaos. Comeback.

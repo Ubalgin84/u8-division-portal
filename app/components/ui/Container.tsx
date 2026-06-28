@@ -10,8 +10,8 @@ type Props = {
 
 const sizes = {
   full: "max-w-[1600px]",
-  wide: "max-w-[1320px]",
-  content: "max-w-[960px]",
+  wide: "max-w-[1280px]",
+  content: "max-w-[900px]",
 };
 
 export default function Container({
@@ -21,7 +21,7 @@ export default function Container({
 }: Props) {
   return (
     <div
-      className={`w-full ${sizes[size]} mx-auto px-5 md:px-7 xl:px-8 ${className}`}
+      className={`mx-auto w-full ${sizes[size]} px-6 lg:px-8 ${className}`}
     >
       {children}
     </div>

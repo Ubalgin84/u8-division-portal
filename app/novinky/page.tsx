@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Container from "../components/ui/Container";
 
-import NewsHero from "../components/NewsHero";
+import PageHero from "../components/ui/PageHero";
 import FeaturedNews from "../components/FeaturedNews";
 import NewsGrid from "../components/NewsGrid";
 
@@ -34,7 +34,11 @@ export default async function NewsPage() {
 
         <Container size="wide">
 
-          <NewsHero />
+          <PageHero
+            eyebrow="U8 DIVISIONE NEWS"
+            title="NOVINKY"
+            description="Reportáže, výsledky, fotografie a zákulisí závodů U8 Divisione."
+          />
 
           {featuredArticle && (
             <FeaturedNews article={featuredArticle} />

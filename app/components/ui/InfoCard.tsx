@@ -11,7 +11,7 @@ export default function InfoCard({
 }: InfoCardProps) {
   return (
     <div
-      className={`rounded-2xl border border-red-900 bg-black/70 backdrop-blur-sm p-8 ${className}`}
+      className={`rounded-2xl border border-red-900 bg-black/70 backdrop-blur-sm p-6 ${className}`}
     >
       {children}
     </div>

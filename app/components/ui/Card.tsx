@@ -14,14 +14,14 @@ export default function Card({
   return (
     <div
       className={`
-        rounded-xl
+        rounded-2xl
         border
         border-red-900/70
         bg-black/75
         backdrop-blur-md
         shadow-lg
         transition-all duration-300
-        ${padded ? "p-4 md:p-5" : ""}
+        ${padded ? "p-6" : ""}
         ${className}
       `}
     >

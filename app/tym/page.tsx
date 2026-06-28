@@ -1,6 +1,12 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { supabase } from "../../lib/supabase";
+import Container from "../components/ui/Container";
+import PageHero from "../components/ui/PageHero";
+import Section from "../components/ui/Section";
+import InfoCard from "../components/ui/InfoCard";
+import SectionTitle from "../components/ui/SectionTitle";
+import StatCard from "../components/ui/StatCard";
 
 
 export default async function TymPage() {
@@ -82,29 +88,19 @@ export default async function TymPage() {
       <div className="bg-black/60 min-h-screen">
 
         <Header />
-        <div className="h-40"></div>
+        <Container size="wide">
 
-        <section className="max-w-7xl mx-auto px-6 pt-[200px] pb-24">
-          <div className="text-center mb-20">
-            <p className="text-red-500 uppercase tracking-[0.3em] mb-4">
-              U8 Divisione
-            </p>
-
-            <h1 className="text-7xl font-black mb-6">
-              TÝM
-            </h1>
-
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
-              Chaos. Comeback. Endurance.
-              Poznej členy U8 Divisione.
-            </p>
-          </div>
+          <PageHero
+            eyebrow="U8 Divisione"
+            title="TÝM"
+            description="Chaos. Comeback. Endurance. Poznej členy U8 Divisione."
+          />
 
           {/* Členové týmu */}
 
           <div className="grid md:grid-cols-3 gap-8 mb-20">
 
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center hover:border-red-500 hover:scale-105 transition-all duration-300">
+            <InfoCard className="text-center transition-all duration-300 hover:-translate-y-1 hover:border-red-500">
               <div className="w-24 h-24 mx-auto rounded-full border-2 border-red-500 flex items-center justify-center text-5xl font-black mb-6">
                 RD
               </div>
@@ -123,10 +119,10 @@ export default async function TymPage() {
                 <p>Oblíbená trať: Nürburgring</p>
                 <p>GT3 Endurance</p>
               </div>
-            </div>
+            </InfoCard>
 
 
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center hover:border-red-500 hover:scale-105 transition-all duration-300">
+            <InfoCard className="text-center transition-all duration-300 hover:-translate-y-1 hover:border-red-500">
               <img
                 src="/U8.jpg"
                 alt="Ubalgin_8"
@@ -146,9 +142,9 @@ export default async function TymPage() {
                 <p>Vedoucí týmu</p>
                 <p>Twitch & YouTube</p>
               </div>
-            </div>
+            </InfoCard>
 
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center hover:border-red-500 hover:scale-105 transition-all duration-300">
+            <InfoCard className="text-center transition-all duration-300 hover:-translate-y-1 hover:border-red-500">
               <div className="w-24 h-24 mx-auto rounded-full border-2 border-red-500 flex items-center justify-center text-5xl font-black mb-6">
                 MK
               </div>
@@ -166,104 +162,64 @@ export default async function TymPage() {
                 <p>Vytrvalostní závody</p>
                 <p>Týmový jezdec</p>
               </div>
-            </div>
+            </InfoCard>
 
           </div>
           <div className="h-24"></div>
 
           {/* Statistiky */}
 
-          <div className="text-center mt-32 mb-12">
+          <SectionTitle
+            subtitle="Hall of Fame"
+            centered
+          >
+            ÚSPĚCHY U8 DIVISIONE
+          </SectionTitle>
 
-            <p className="text-red-500 uppercase tracking-[0.3em] mb-4">
-              Hall of Fame
-            </p>
+          <p className="mb-12 text-center text-lg text-gray-400">
+            Automaticky generováno z výsledků týmu.
+          </p>
 
-            <h2 className="text-5xl font-black mb-4">
-              ÚSPĚCHY U8 DIVISIONE
-            </h2>
+          <div className="grid gap-6 md:grid-cols-4 mt-40">
 
-            <p className="text-gray-400 text-lg">
-              Automaticky generováno z výsledků týmu.
-            </p>
+            <StatCard
+              value={wins}
+              label="Vítězství"
+            />
 
-          </div>
+            <StatCard
+              value={totalRaces}
+              label="Závodů"
+            />
 
-          <div className="grid md:grid-cols-4 gap-6 mt-40">
+            <StatCard
+              value={podiums}
+              label="Pódií"
+            />
 
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">
-                {wins}
-              </p>
-
-              <p className="text-gray-400 uppercase mt-3">
-                Vítězství
-              </p>
-            </div>
-
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">
-                {totalRaces}
-              </p>
-
-              <p className="text-gray-400 uppercase mt-3">
-                Závodů
-              </p>
-            </div>
-
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">
-                {podiums}
-              </p>
-
-              <p className="text-gray-400 uppercase mt-3">
-                Pódií
-              </p>
-            </div>
-
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">
-                {totalPoints}
-              </p>
-
-              <p className="text-gray-400 uppercase mt-3">
-                Celkem bodů
-              </p>
-            </div>
+            <StatCard
+              value={totalPoints}
+              label="Celkem bodů"
+            />
 
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mt-8">
+          <div className="grid gap-6 md:grid-cols-3 mt-8">
 
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-6xl font-black text-red-500">
-                P{bestFinish}
-              </p>
+            <StatCard
+              value={`P${bestFinish}`}
+              label="Nejlepší výsledek"
+            />
 
-              <p className="text-gray-400 uppercase mt-3">
-                Nejlepší výsledek
-              </p>
-            </div>
+            <StatCard
+              value={mostUsedCar}
+              label="Nejpoužívanější vůz"
+            />
 
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-xl font-black text-red-500 break-words">
-                {mostUsedCar}
-              </p>
-
-              <p className="text-gray-400 uppercase mt-3">
-                Nejpoužívanější vůz
-              </p>
-            </div>
-
-            <div className="bg-black/90 border border-red-900 rounded-xl p-8 text-center">
-              <p className="text-xl font-black text-red-500 break-words">
-                {mostUsedTrack}
-              </p>
-
-              <p className="text-gray-400 uppercase mt-3">
-                Nejoblíbenější trať
-              </p>
-            </div>
+            <StatCard
+              value={mostUsedTrack}
+              label="Nejoblíbenější trať"
+            />
 
           </div>
 
@@ -305,7 +261,7 @@ export default async function TymPage() {
 
           </div>
 
-        </section>
+        </Container>
 
         <Footer />
       </div>

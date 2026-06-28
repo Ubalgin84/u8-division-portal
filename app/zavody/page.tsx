@@ -6,6 +6,10 @@ import { createClient } from "@/lib/supabase-server";
 import Image from "next/image";
 import { getTrackImage } from "@/lib/trackImages";
 import Container from "../components/ui/Container";
+import PageHero from "../components/ui/PageHero";
+import Badge from "../components/ui/Badge";
+import Section from "../components/ui/Section";
+import InfoCard from "../components/ui/InfoCard";
 
 
 export default async function ZavodyPage() {
@@ -67,33 +71,23 @@ export default async function ZavodyPage() {
                 {/* HERO */}
 
                 <Container size="wide">
-                    <section className="pt-32 pb-16 text-center">
-
-                        <p className="mt-6 text-sm uppercase tracking-[0.4em] text-red-500">
-                            U8 Divisione
-                        </p>
-
-                        <h1 className="mt-6 text-6xl xl:text-7xl font-black">
-                            KALENDÁŘ ZÁVODŮ
-                        </h1>
-
-                        <p className="mt-5 text-lg text-gray-400">
-                            Sledujte nadcházející závody, kalendář sezóny a postup týmu.
-                        </p>
-
-                    </section>
+                    <PageHero
+                        eyebrow="U8 Divisione"
+                        title="KALENDÁŘ ZÁVODŮ"
+                        description="Sledujte nadcházející závody, kalendář sezóny a postup týmu."
+                    />
                 </Container>
 
                 {/* OBSAH */}
 
                 <Container size="wide">
-                    <section className="pb-24">
+                    <Section className="pb-24">
 
                         {/* DALŠÍ ZÁVOD */}
 
                         {/* DALŠÍ ZÁVOD */}
 
-                        <div className="overflow-hidden bg-black/75 backdrop-blur-sm border border-red-900 rounded-2xl mb-10">
+                        <InfoCard className="overflow-hidden mb-10 p-0">
 
                             <div className="grid md:grid-cols-2">
 
@@ -169,17 +163,17 @@ export default async function ZavodyPage() {
                                     <div className="absolute inset-0 bg-gradient-to-l from-transparent via-black/20 to-black/80" />
 
                                     <div className="absolute top-6 right-6">
-                                        <span className="bg-green-500/90 text-white px-4 py-1 rounded-full text-xs font-bold">
+                                        <Badge color="green">
                                             NADCHÁZEJÍCÍ
-                                        </span>
+                                        </Badge>
                                     </div>
 
                                 </div>
 
                             </div>
 
-                        </div>
-                        <div className="bg-black/75 backdrop-blur-sm border border-red-900 rounded-2xl p-10">
+                        </InfoCard>
+                        <InfoCard className="p-10">
                             <h3 className="text-3xl font-black mb-8">
                                 ROZPIS ZÁVODŮ
                             </h3>
@@ -206,19 +200,16 @@ export default async function ZavodyPage() {
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
 
                                             <div className="absolute top-4 right-4">
-                                                <span
-                                                    className={
-                                                        zavod.race_datetime &&
-                                                            new Date(zavod.race_datetime) > new Date()
-                                                            ? "bg-green-500/90 text-white px-3 py-1 rounded-full text-xs font-bold"
-                                                            : "bg-gray-700/90 text-white px-3 py-1 rounded-full text-xs font-bold"
-                                                    }
-                                                >
-                                                    {zavod.race_datetime &&
-                                                        new Date(zavod.race_datetime) > new Date()
-                                                        ? "NADCHÁZEJÍCÍ"
-                                                        : "DOKONČENÝ"}
-                                                </span>
+                                                {zavod.race_datetime &&
+                                                    new Date(zavod.race_datetime) > new Date() ? (
+                                                    <Badge color="green">
+                                                        NADCHÁZEJÍCÍ
+                                                    </Badge>
+                                                ) : (
+                                                    <Badge color="gray">
+                                                        DOKONČENÝ
+                                                    </Badge>
+                                                )}
                                             </div>
 
                                             <div className="absolute bottom-0 left-0 p-6 pb-0 translate-y-10">
@@ -290,9 +281,9 @@ export default async function ZavodyPage() {
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
 
                                             <div className="absolute top-4 right-4">
-                                                <span className="bg-gray-700/90 text-white px-4 py-1 rounded-full text-xs font-bold">
+                                                <Badge color="gray">
                                                     DOKONČENÝ
-                                                </span>
+                                                </Badge>
                                             </div>
 
                                             <div className="absolute bottom-0 left-0 p-6 pb-0 translate-y-10">
@@ -345,9 +336,9 @@ export default async function ZavodyPage() {
                             </div>
 
 
-                        </div >
+                        </InfoCard>
 
-                    </section >
+                    </Section>
                 </Container>
                 <Footer />
             </div >
