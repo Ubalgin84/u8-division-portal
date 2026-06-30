@@ -34,11 +34,6 @@ export default async function ZavodyPage() {
                 new Date(b.race_datetime).getTime()
         )[0];
 
-    const rozdilMs = dalsiZavod?.race_datetime
-        ? new Date(dalsiZavod.race_datetime).getTime() - Date.now()
-        : 0;
-
-
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("cs-CZ");
@@ -87,92 +82,112 @@ export default async function ZavodyPage() {
 
                         {/* DALŠÍ ZÁVOD */}
 
-                        <InfoCard className="overflow-hidden mb-10 p-0">
+                        {dalsiZavod ? (
 
-                            <div className="grid md:grid-cols-2">
+                            <InfoCard className="overflow-hidden mb-10 p-0">
 
-                                {/* LEVÁ ČÁST */}
+                                <div className="grid md:grid-cols-2">
 
-                                <div className="p-10 flex flex-col justify-center">
+                                    {/* LEVÁ ČÁST */}
 
-                                    <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
-                                        DALŠÍ ZÁVOD
-                                    </p>
+                                    <div className="p-10 flex flex-col justify-center">
 
-                                    <h2 className="text-5xl font-black mb-2">
-                                        {dalsiZavod?.track ?? "Není naplánován závod"}
-                                    </h2>
-
-                                    <p className="text-gray-400 text-xl mb-10">
-                                        {dalsiZavod?.series ?? "-"}
-                                    </p>
-
-                                    <div className="grid grid-cols-2 gap-8 mb-8">
-
-                                        <div>
-                                            <p className="text-gray-500 text-sm">
-                                                Datum
-                                            </p>
-
-                                            <p className="text-3xl font-black">
-                                                {dalsiZavod?.race_date
-                                                    ? formatDate(dalsiZavod.race_date)
-                                                    : "-"}
-                                            </p>
-                                        </div>
-
-                                        <div>
-                                            <p className="text-gray-500 text-sm">
-                                                Čas
-                                            </p>
-
-                                            <p className="text-3xl font-black">
-                                                {dalsiZavod?.race_time ?? "-"}
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <div className="border-t border-red-900 pt-6">
-
-                                        <p className="text-gray-500 text-sm uppercase tracking-[0.2em] mb-2">
-                                            START ZA
+                                        <p className="text-red-500 uppercase tracking-[0.3em] text-sm mb-4">
+                                            DALŠÍ ZÁVOD
                                         </p>
 
-                                        {dalsiZavod?.race_datetime && (
-                                            <Countdown
-                                                raceDatetime={dalsiZavod.race_datetime}
-                                            />
-                                        )}
+                                        <h2 className="text-5xl font-black mb-2">
+                                            {dalsiZavod?.track ?? "Není naplánován závod"}
+                                        </h2>
+
+                                        <p className="text-gray-400 text-xl mb-10">
+                                            {dalsiZavod?.series ?? "-"}
+                                        </p>
+
+                                        <div className="grid grid-cols-2 gap-8 mb-8">
+
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Datum
+                                                </p>
+
+                                                <p className="text-3xl font-black">
+                                                    {dalsiZavod?.race_date
+                                                        ? formatDate(dalsiZavod.race_date)
+                                                        : "-"}
+                                                </p>
+                                            </div>
+
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Čas
+                                                </p>
+
+                                                <p className="text-3xl font-black">
+                                                    {dalsiZavod?.race_time ?? "-"}
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <div className="border-t border-red-900 pt-6">
+
+                                            <p className="text-gray-500 text-sm uppercase tracking-[0.2em] mb-2">
+                                                START ZA
+                                            </p>
+
+                                            {dalsiZavod?.race_datetime && (
+                                                <Countdown
+                                                    raceDatetime={dalsiZavod.race_datetime}
+                                                />
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+                                    {/* PRAVÁ ČÁST */}
+
+                                    <div className="relative min-h-[340px]">
+
+                                        <Image
+                                            src={getTrackImage(dalsiZavod?.track)}
+                                            alt={dalsiZavod?.track || "Další závod"}
+                                            fill
+                                            className="object-cover"
+                                        />
+
+                                        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-black/20 to-black/80" />
+
+                                        <div className="absolute top-6 right-6">
+                                            <Badge color="green">
+                                                NADCHÁZEJÍCÍ
+                                            </Badge>
+                                        </div>
 
                                     </div>
 
                                 </div>
 
-                                {/* PRAVÁ ČÁST */}
+                            </InfoCard>
 
-                                <div className="relative min-h-[340px]">
+                        ) : (
+                            <InfoCard className="p-12 text-center">
+                                <p className="text-red-500 uppercase tracking-[0.3em] text-sm">
+                                    KALENDÁŘ
+                                </p>
 
-                                    <Image
-                                        src={getTrackImage(dalsiZavod?.track)}
-                                        alt={dalsiZavod?.track || "Další závod"}
-                                        fill
-                                        className="object-cover"
-                                    />
+                                <h2 className="mt-4 text-4xl font-black">
+                                    Aktuálně není vypsán žádný závod
+                                </h2>
 
-                                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-black/20 to-black/80" />
+                                <p className="mt-4 text-gray-400 max-w-xl mx-auto">
+                                    Jakmile bude zveřejněn nový kalendář sezóny,
+                                    zobrazí se zde informace o dalším závodě.
+                                </p>
+                            </InfoCard>
+                        )}
 
-                                    <div className="absolute top-6 right-6">
-                                        <Badge color="green">
-                                            NADCHÁZEJÍCÍ
-                                        </Badge>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </InfoCard>
                         <InfoCard className="p-10">
                             <h3 className="text-3xl font-black mb-8">
                                 ROZPIS ZÁVODŮ
@@ -188,13 +203,13 @@ export default async function ZavodyPage() {
                                 {upcomingRaces.map((zavod) => (
                                     <div
                                         key={zavod.id}
-                                        className="overflow-hidden bg-black/80 border border-red-900 rounded-2xl hover:border-red-600 transition-all duration-300 hover:scale-[1.02]">
+                                        className="group overflow-hidden bg-black/80 border border-red-900 rounded-2xl hover:border-red-600 transition-all duration-300 hover:scale-[1.02]">
                                         <div className="relative h-64 w-full">
                                             <Image
                                                 src={getTrackImage(zavod.track)}
                                                 alt={zavod.track}
                                                 fill
-                                                className="object-cover"
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
 
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
@@ -268,14 +283,14 @@ export default async function ZavodyPage() {
                                 {completedRaces.map((zavod) => (
                                     <div
                                         key={zavod.id}
-                                        className="overflow-hidden bg-black/60 border border-gray-800 rounded-2xl opacity-80"
+                                        className="group overflow-hidden bg-black/60 border border-gray-800 rounded-2xl opacity-70 hover:opacity-100 transition-all duration-300"
                                     >
                                         <div className="relative h-64 w-full">
                                             <Image
                                                 src={getTrackImage(zavod.track)}
                                                 alt={zavod.track}
                                                 fill
-                                                className="object-cover grayscale"
+                                                className="object-cover grayscale transition-transform duration-700 group-hover:scale-105"
                                             />
 
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
