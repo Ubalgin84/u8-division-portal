@@ -74,7 +74,7 @@ export default async function VysledkyPage() {
             description="Přehled všech závodů, získaných bodů a dosažených výsledků."
           />
 
-        
+
           {/* STATISTIKY */}
 
           <Section>
@@ -101,101 +101,112 @@ export default async function VysledkyPage() {
 
             <TableCard>
 
-              <table className="w-full">
+              <div className="overflow-x-auto">
 
-                <thead className="bg-gradient-to-r from-black to-red-950">
+                <table className="w-full min-w-[900px]">
 
-                  <tr>
+                  <thead className="bg-gradient-to-r from-black to-red-950">
 
-                    <th className="p-5 text-left">Datum</th>
-                    <th className="p-5 text-left">Závod</th>
-                    <th className="p-5 text-left">Auto</th>
-                    <th className="p-5 text-center">Start</th>
-                    <th className="p-5 text-center">Cíl</th>
-                    <th className="p-5 text-center">Body</th>
-                    <th className="p-5 text-center">Report</th>
+                    <tr>
 
-                  </tr>
-
-                </thead>
-
-                <tbody>
-
-                  {results?.map((race) => (
-
-                    <tr
-                      key={race.id}
-                      className="border-b border-red-900 transition hover:bg-red-950/30"
-                    >
-
-                      <td className="p-5">
-                        {race.race_date
-                          ? new Intl.DateTimeFormat("cs-CZ", {
-                            day: "numeric",
-                            month: "numeric",
-                            year: "numeric",
-                          }).format(new Date(race.race_date))
-                          : "-"}
-                      </td>
-
-                      <td className="p-5 font-bold">
-                        {race.race_name}
-                      </td>
-
-                      <td className="p-5">
-                        {race.car}
-                      </td>
-
-                      <td className="text-center">
-                        P{race.start_pos}
-                      </td>
-
-                      <td
-                        className={`text-center font-bold ${race.finish_pos === 1
-                          ? "text-yellow-400"
-                          : race.finish_pos === 2
-                            ? "text-gray-300"
-                            : race.finish_pos === 3
-                              ? "text-amber-600"
-                              : "text-red-500"
-                          }`}
-                      >
-                        P{race.finish_pos}
-                      </td>
-
-                      <td className="text-center">
-                        {race.points}
-                      </td>
-
-                      <td className="text-center">
-
-                        {race.article_slug ? (
-
-                          <a
-                            href={`/novinky/${race.article_slug}`}
-                            className="font-bold text-red-500 hover:text-red-400"
-                          >
-                            📰 Report
-                          </a>
-
-                        ) : (
-
-                          <span className="text-gray-500">
-                            —
-                          </span>
-
-                        )}
-
-                      </td>
+                      <th className="p-5 text-left">Datum</th>
+                      <th className="p-5 text-left">Závod</th>
+                      <th className="p-5 text-left">Auto</th>
+                      <th className="p-5 text-center">Start</th>
+                      <th className="p-5 text-center">Cíl</th>
+                      <th className="p-5 text-center">Body</th>
+                      <th className="p-5 text-center">Report</th>
 
                     </tr>
 
-                  ))}
+                  </thead>
 
-                </tbody>
+                  <tbody>
 
-              </table>
+                    {results && results.length > 0 ? (
 
+                      results.map((race) => (
+
+                        <tr
+                          key={race.id}
+                          className="border-b border-red-900 transition hover:bg-red-950/30"
+                        >
+
+                          <td className="p-5">
+                            {race.race_date
+                              ? new Intl.DateTimeFormat("cs-CZ", {
+                                day: "numeric",
+                                month: "numeric",
+                                year: "numeric",
+                              }).format(new Date(race.race_date))
+                              : "-"}
+                          </td>
+
+                          <td className="p-5 font-bold">
+                            {race.race_name}
+                          </td>
+
+                          <td className="p-5">
+                            {race.car}
+                          </td>
+
+                          <td className="p-5 text-center">
+                            P{race.start_pos}
+                          </td>
+
+                          <td
+                            className={`p-5 text-center font-bold ${race.finish_pos === 1
+                                ? "text-yellow-400"
+                                : race.finish_pos === 2
+                                  ? "text-gray-300"
+                                  : race.finish_pos === 3
+                                    ? "text-amber-600"
+                                    : "text-red-500"
+                              }`}
+                          >
+                            P{race.finish_pos}
+                          </td>
+
+                          <td className="p-5 text-center">
+                            {race.points}
+                          </td>
+
+                          <td className="p-5 text-center">
+                            {race.article_slug ? (
+                              <a
+                                href={`/novinky/${race.article_slug}`}
+                                className="font-bold text-red-500 hover:text-red-400"
+                              >
+                                📰 Report
+                              </a>
+                            ) : (
+                              <span className="text-gray-500">—</span>
+                            )}
+                          </td>
+
+                        </tr>
+
+                      ))
+
+                    ) : (
+
+                      <tr>
+
+                        <td
+                          colSpan={7}
+                          className="p-12 text-center text-gray-400"
+                        >
+                          Zatím nebyly přidány žádné výsledky závodů.
+                        </td>
+
+                      </tr>
+
+                    )}
+
+                  </tbody>
+
+                </table>
+              </div>
             </TableCard>
 
           </Section>
