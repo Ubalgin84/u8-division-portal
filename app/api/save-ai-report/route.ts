@@ -110,6 +110,7 @@ export async function POST(req: Request) {
         content: body.article,
 
         featured_image: body.featuredImage,
+        image_url: body.featuredImage,
 
         track: body.track,
         car: body.car,

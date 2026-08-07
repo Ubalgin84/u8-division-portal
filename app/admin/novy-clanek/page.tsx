@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { uploadImageToBucket } from "../../../lib/uploadImage";
 
 export default function AdminPage() {
   const [nazev, setNazev] = useState("");
@@ -187,28 +188,26 @@ U8 Divisione pokračuje v budování své pozice mezi předními týmy endurance
     let imageUrl = "";
 
     if (imageFile) {
+      const { url, error: uploadError } = await uploadImageToBucket(
+        "articles",
+        imageFile
+      );
 
-      const fileName =
-        Date.now() + "-" + imageFile.name;
+      if (uploadError || !url) {
+        console.error("ARTICLE IMAGE UPLOAD FAILED:", uploadError);
 
-      const { error: uploadError } =
-        await supabase.storage
-          .from("articles")
-          .upload(fileName, imageFile);
-      console.log("UPLOAD ERROR:", uploadError);
-      console.log("FILE:", imageFile);
-      console.log("FILE NAME:", fileName);
+        alert(
+          `Nahrání titulního obrázku selhalo:\n\n${uploadError}\n\n` +
+            "Článek nebyl uložen. Zkuste to prosím znovu, nebo vyberte jiný soubor."
+        );
 
-      if (!uploadError) {
-
-        imageUrl =
-          supabase.storage
-            .from("articles")
-            .getPublicUrl(fileName)
-            .data.publicUrl;
+        return;
       }
+
+      imageUrl = url;
     }
-    const { data, error } = await supabase
+
+    const { error } = await supabase
       .from("articles")
       .insert([
         {
@@ -225,6 +224,7 @@ U8 Divisione pokračuje v budování své pozice mezi předními týmy endurance
           excerpt: perex,
           content: article,
           image_url: imageUrl,
+          featured_image: imageUrl,
 
           status: "published",
           race_date: datum,
@@ -246,14 +246,18 @@ U8 Divisione pokračuje v budování své pozice mezi předními týmy endurance
           team_reaction: teamReaction,
 
         },
-      ])
-      .select();
-
-    console.log("DATA:", data);
-    console.log("ERROR:", error);
+      ]);
 
     if (error) {
-      alert("Chyba při ukládání.");
+      console.error("ARTICLE INSERT FAILED:", {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+        raw: error,
+      });
+
+      alert(`Chyba při ukládání článku:\n\n${error.message}`);
       return;
     }
 

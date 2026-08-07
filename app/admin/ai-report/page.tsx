@@ -3,12 +3,16 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { uploadImageToBucket } from "../../../lib/uploadImage";
 import { ChangeEvent } from "react";
 
 function AIReportContent() {
 
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<any>(null);
+    const [imageUploadError, setImageUploadError] = useState<string | null>(
+        null
+    );
     const searchParams = useSearchParams();
     const resultId = searchParams.get("id");
 
@@ -88,25 +92,23 @@ function AIReportContent() {
 
         if (!file) return;
 
-        const fileName = `${Date.now()}-${file.name}`;
+        const { url, error } = await uploadImageToBucket("articles", file);
 
-        const { error } = await supabase.storage
-            .from("articles")
-            .upload(fileName, file);
-
-        if (error) {
-            console.error(error);
-            alert("Upload obrázku selhal.");
+        if (error || !url) {
+            console.error("ARTICLE IMAGE UPLOAD FAILED:", error);
+            setImageUploadError(error);
+            alert(
+                `Upload obrázku selhal:\n\n${error}\n\n` +
+                    "Dokud nebude obrázek úspěšně nahrán, nepůjde článek publikovat."
+            );
             return;
         }
 
-        const { data } = supabase.storage
-            .from("articles")
-            .getPublicUrl(fileName);
+        setImageUploadError(null);
 
         setForm((prev) => ({
             ...prev,
-            featuredImage: data.publicUrl,
+            featuredImage: url,
         }));
 
         alert("Obrázek nahrán.");
@@ -120,8 +122,6 @@ function AIReportContent() {
         const {
             data: { session },
         } = await supabase.auth.getSession();
-
-        console.log("SESSION:", session);
 
         if (!session) {
             alert("Nejste přihlášen.");
@@ -214,6 +214,17 @@ function AIReportContent() {
 
     async function publishArticle() {
         if (!result) return;
+
+        // Image upload happens as a separate step before publishing, so a
+        // failed upload must block publish explicitly or it would silently
+        // go out with no cover image.
+        if (imageUploadError) {
+            alert(
+                `Titulní obrázek se naposledy nepodařilo nahrát:\n\n${imageUploadError}\n\n` +
+                    "Článek nebyl publikován. Nahrajte prosím obrázek znovu."
+            );
+            return;
+        }
 
         const {
             data: { session },

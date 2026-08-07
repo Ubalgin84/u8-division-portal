@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabase";
+import { uploadImageToBucket } from "../../../lib/uploadImage";
 
 export default function AdminMediaPage() {
     const [uploading, setUploading] = useState(false);
@@ -22,27 +23,16 @@ export default function AdminMediaPage() {
 
         setUploading(true);
 
-        const fileName =
-            Date.now() + "-" + file.name;
+        const { url, error } = await uploadImageToBucket("media", file);
 
-        const { error } = await supabase.storage
-            .from("media")
-            .upload(fileName, file);
-
-        if (error) {
-            alert("Upload selhal.");
-            console.error(error);
+        if (error || !url) {
+            console.error("MEDIA IMAGE UPLOAD FAILED:", error);
+            alert(`Upload obrázku selhal:\n\n${error}`);
             setUploading(false);
             return;
         }
 
-        const {
-            data: { publicUrl },
-        } = supabase.storage
-            .from("media")
-            .getPublicUrl(fileName);
-
-        setImageUrl(publicUrl);
+        setImageUrl(url);
         await loadImages();
         setUploading(false);
     }
